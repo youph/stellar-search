@@ -64,7 +64,8 @@ curl -XPOST -H "Content-Type: application/json" -d '{
 }' http://localhost:8080/api/v1/auth
 ```
 
-The response JSON body will have the token in the `jwt` field. 
+The response JSON body will have the token in the `jwt` field. JWT is valid for 30 days by default
+and persists between app restarts 
 
 Include the JWT in the Authorization header for all subsequent requests. E.g
 ```bash
@@ -129,16 +130,15 @@ These are the supported (mutually exclusive) profiles we can run our application
 * **develop** - Uses a local H2 database stored **on disk**. Changes are persisted and available between app restarts  
 * **test** - Uses a local H2 database stored **in memory**. Changes are not persisted between app restarts  
 * **staging** - Uses a local (docker) Postgres database. Allows multiple applications to share a database. 
-* **production** - Eventually will use a central Postgres database 
+  Note may not be required if this is just one app.
+* **production** - Eventually may use a central Postgres database 
 
 The `default` is automatically enabled and will depending on the application will include any necessary
 additive profiles such as
 
 * `secrets` - for storing sensitive information with restricted read access. Having secrets in a separate config files 
 allows for having the 'locked-down' file permissions readable only by the service user, whilst still allowing
-public configuration world-readable 
-
-that are used across all environmental profiles.
+public configuration world-readable that are used across all environmental profiles.
 
 ### There are so many property files now! Where do I add new properties?
 
@@ -156,13 +156,21 @@ application is being run in
 
 Any app specific property should go into the respective `application-{develop|test|staging|production}.yml` file.
 
-# Resources
+# Git workflow
+[Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) is used for
+the branching model and the maven [jgitflow](https://bitbucket.org/atlassian/jgit-flow/wiki/Home)
+plugin is used for release branch management, artifact deployment and tagging. 
 
-* [Spring Boot Reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
-* [Spring Framework Reference](https://docs.spring.io/spring/docs/current/spring-framework-reference/)
-* [Spring Guides](https://spring.io/guides)
-* [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-* [Elasticsearch REST Client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html)
+Branches
+* `master`: Latest stable and tagged release
+* `develop`: Latest snapshot
+* `feature/<JIRA ID LOWERCASE>-<OPTIONAL DESCRIPTION LOWERCASE>`
+
+Note due to Windows/MacOS being a case-insensitive filesystem (but bitbucket/github not) please always
+checkout and create branches (including JIRA IDs) in lowercase. Commit messages should still 
+be prefixed with `JIRA-ID: ` in uppercase.
+
+Feature branches should ideally be squash committed, then rebased onto develop.
 
 # Codestyle
 
@@ -179,12 +187,14 @@ And with the following additional rules
 * Any linewrapped
   - method declaration parameters, 
   - method call arguments, 
-  - class implement lists,
-  - method throws declaration and 
+  - class `implements` lists,
+  - method `throws` declaration and 
   - try with resources
   
-  items are chopped down, indented 4 spaces and with the closing delimiter (except for class
-  definition) on a new line at the block's indentation level.
+  items start on a new line, indented 4 spaces from the current block and with the closing
+  delimiter if any (`implements` and `throws` don't have a closing delimiter) on a new line at
+  the current block's indentation level. It is advised, but not required, that any items list if that
+  is new-lined is `chopped down` with each item on its own line.
 
   Examples
     ```java
@@ -195,23 +205,50 @@ And with the following additional rules
         // ...
     }
     
-    // WRONG - 1st and 3rd param not on new line, closing bracket not on new line
-    public void method(final String param1,
-        final String param2, final String param3) {
+    // WRONG - 1st param not on new line, closing bracket not on new line
+    public void method(final String param1, final String param2
+        final String param3, final String param4) {
         // ...
     }
     
     // RIGHT
-    public void method(
-        final String param1,
-        final String param2,
-        final String param3
-    ) {
-        // ...
-    }    
+    public static void veryLongMethodName(
+      final String param1, // chopped down items
+      final String param2,
+      final String param3,
+      final String param4
+    ) throws E1, E2, E3 { // permitted if fits on one line
+      // ...
+    } 
+  
+    // RIGHT
+    public String method2(final String p1, final String p2) throws
+      VeryLongException1,
+      VeryLongException2,
+      VeryLongException3 {
+      // ...
+    }
+  
+    // RIGHT
+     veryLongObject.veryLongMethod(
+       arg1, arg2, arg3 // permitted if fits on one line
+     ).chainedMethod(
+       longArgument1,
+       longArgument2,
+       longArgument3,
+       longArgument4
+     );
     ```
 
 This code style in enforced (where it can) by the maven build by the checkstyle config in the 
 `build-tools` module, which is based off
 [http://checkstyle.sourceforge.net/google_style.html](http://checkstyle.sourceforge.net/google_style.html) 
 checkstyle configuration.
+
+# Resources
+
+* [Spring Boot Reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
+* [Spring Framework Reference](https://docs.spring.io/spring/docs/current/spring-framework-reference/)
+* [Spring Guides](https://spring.io/guides)
+* [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+* [Elasticsearch REST Client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html)
