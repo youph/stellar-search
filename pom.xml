@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>au.com.d2dcrc.ia</groupId>
+    <artifactId>ia-root</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>
+        Investigative Analytics - Root Aggregator Pom
+    </description>
+
+    <organization>
+        <name>Data to Decisions CRC</name>
+        <url>http://www.d2dcrc.com.au</url>
+    </organization>
+
+    <properties>
+        <!-- project -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- build -->
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <!-- dependencies -->
+        <elasticsearch.version>6.1.1</elasticsearch.version>
+        <guava.version>23.5-jre</guava.version>
+        <jackson.version>2.9.2</jackson.version>
+        <postgresql.version>9.4.1212</postgresql.version>
+        <snakeyaml.version>1.19</snakeyaml.version>
+        <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
+        <spring.security.version>4.2.3.RELEASE</spring.security.version>
+        <swagger.version>2.7.0</swagger.version>
+    </properties>
+
+    <modules>
+        <module>build-tools</module>
+        <module>parent</module>
+        <module>core</module>
+        <module>search</module>
+    </modules>
+
+</project>

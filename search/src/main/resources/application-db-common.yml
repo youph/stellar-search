@@ -1,0 +1,20 @@
+---
+# Properties that are truly common to all database profiles should be defined here
+spring:
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+      # this was the default in hibernate 5 but spring-boot must reverts to
+      # legacy behaviour to maintain backwards compatibility with Hibernate 4
+      # Remove in spring boot 2.0, when they revert to default
+      use-new-id-generator-mappings: true
+
+    properties:
+      use_sql_comments: false
+      format_sql: false
+      hibernate:
+        jdbc.time_zone: UTC
+
+

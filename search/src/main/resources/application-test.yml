@@ -1,0 +1,11 @@
+---
+logging:
+  level:
+    au.com.d2dcrc: DEBUG
+
+spring:
+  profiles:
+    include:
+      - h2
+  datasource:
+    url: jdbc:h2:mem:discovery;IGNORECASE=TRUE;

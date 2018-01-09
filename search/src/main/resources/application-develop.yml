@@ -1,0 +1,14 @@
+---
+logging:
+  level:
+    au.com.d2dcrc: DEBUG
+
+spring:
+  profiles:
+    include:
+      - h2
+
+  datasource:
+    # DB_CLOSE_ON_EXIT=FALSE is required to allow services to release claims on shutdown.
+    # Don't set this property in test profiles, as it prevents integrations tests from clearing the database between tests
+    url: jdbc:h2:./develop;IGNORECASE=TRUE;DB_CLOSE_ON_EXIT=FALSE;

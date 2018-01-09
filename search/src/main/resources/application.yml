@@ -1,0 +1,21 @@
+---
+spring:
+  profiles.include:
+    - secrets
+  jackson:
+    serialization:
+      # Serialise/Deserialise java 8 datetimes as ISO 6801 strings
+      WRITE_DATES_AS_TIMESTAMPS: false
+    deserialization:
+      # why Why WHY does jackson have stupid defaults - No I want to preserve timezone info!
+      ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false
+
+jwt:
+  algorithm: HS256
+  expire-seconds: 2592000   # 30 days
+  issuer: d2dcrc
+  #secret:   -- set in application-secrets.yml
+
+elasticsearch.rest-client:
+  addresses:
+    - localhost:9200

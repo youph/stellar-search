@@ -1,0 +1,16 @@
+---
+spring:
+  profiles:
+    include: db-common
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    platform: postgres
+    username: postgres
+    password: example
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+flyway:
+  locations: db/migration/postgres

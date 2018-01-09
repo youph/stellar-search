@@ -1,0 +1,11 @@
+---
+logging:
+  level:
+    au.com.d2dcrc: DEBUG
+
+spring:
+  profiles:
+    include:
+      - postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/investigative_analytics

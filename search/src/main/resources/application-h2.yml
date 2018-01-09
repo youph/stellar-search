@@ -1,0 +1,28 @@
+---
+# Properties common to the H2 database should be defined here
+
+spring:
+  profiles:
+    include:
+      - db-common
+
+  datasource:
+    platform: h2
+    username: default
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+h2:
+  console:
+    enabled: true
+    path: /db
+    settings:
+      trace: false
+      web-allow-others: false
+
+flyway:
+  locations:
+    - db/migration/h2
