@@ -5,8 +5,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,8 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(description = "Manage authentication tokens")
 @RestController
 @ApiResponses({
-    @ApiResponse(code = 403, message = "Accessing the requested resource is forbidden"),
-    @ApiResponse(code = 404, message = "The requested resource was not found")
+    @ApiResponse(
+        code = org.apache.http.HttpStatus.SC_FORBIDDEN, 
+        message = "Accessing the requested resource is forbidden"
+    ),
+    @ApiResponse(
+        code = org.apache.http.HttpStatus.SC_NOT_FOUND, 
+        message = "The requested resource was not found"
+    )
 })
 @RequestMapping(
     value = "/api/v1/auth",
@@ -34,8 +38,6 @@ import org.springframework.web.bind.annotation.RestController;
     produces = MediaType.APPLICATION_JSON_VALUE
 )
 public class AuthenticationController {
-
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -58,11 +60,11 @@ public class AuthenticationController {
     @PostMapping("")
     @ApiResponses({
         @ApiResponse(
-            code = 201,
+            code = org.apache.http.HttpStatus.SC_CREATED,
             message = "Successfully created an authentication token"
         ),
         @ApiResponse(
-            code = 401,
+            code = org.apache.http.HttpStatus.SC_UNAUTHORIZED,
             message = "Authentication failed with supplied credentials",
             response = ErrorView.class
         )

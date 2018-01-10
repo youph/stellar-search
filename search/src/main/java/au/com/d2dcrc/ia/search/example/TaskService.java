@@ -1,12 +1,10 @@
 package au.com.d2dcrc.ia.search.example;
 
 import au.com.d2dcrc.ia.search.user.User;
-
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
@@ -78,7 +76,7 @@ public class TaskService {
      * @param id the id of the task to find
      * @return a task view
      */
-    public TaskView findTask(long id) {
+    public @Nullable TaskView findTask(long id) {
         final TaskEntity entity = taskRepository.findOne(id);
         return (entity == null) ? null : entity.toView();
     }

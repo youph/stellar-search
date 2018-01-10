@@ -51,6 +51,7 @@ public class TaskEntity {
     /**
      * No-arg constructor needed for Hibernate for reading a task from persistence.
      */
+    @SuppressWarnings("unused")
     private TaskEntity() {
     }
 

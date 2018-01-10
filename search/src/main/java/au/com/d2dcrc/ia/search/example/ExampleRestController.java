@@ -36,8 +36,16 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Api(description = "Example controller")
 @RestController
 @ApiResponses({
-    @ApiResponse(code = 403, message = "Accessing the requested resource is forbidden", response = ErrorView.class),
-    @ApiResponse(code = 404, message = "The requested resource was not found", response = ErrorView.class)
+    @ApiResponse(
+        code = org.apache.http.HttpStatus.SC_FORBIDDEN,
+        message = "Accessing the requested resource is forbidden",
+        response = ErrorView.class
+    ),
+    @ApiResponse(
+        code = org.apache.http.HttpStatus.SC_NOT_FOUND, 
+        message = "The requested resource was not found", 
+        response = ErrorView.class
+    )
 })
 @RequestMapping(
     value = "/api/v1/example",
