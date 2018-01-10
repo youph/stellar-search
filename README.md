@@ -1,5 +1,12 @@
 # Investigative Analytics - Search Module
 
+## Build status
+
+ |Branch|Status|
+ |:-----|:----:|
+ |*master*|[![Build Status](https://travis-ci.org/data61/stellar-search.svg?branch=master)](https://travis-ci.org/data61/stellar-search)|
+ |*develop*|[![Build Status](https://travis-ci.org/data61/stellar-search.svg?branch=develop)](https://travis-ci.org/data61/stellar-search)|
+
 ## Setup
 
 ### Development Prerequisites (For MacOS)
