@@ -1,6 +1,5 @@
 package au.com.d2dcrc.ia.search.security;
 
-import au.com.d2dcrc.ia.search.status.ErrorView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -33,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
     )
 })
 @RequestMapping(
-    value = "/api/v1/auth",
+    value = "/api/v1.0/auth",
     consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE
 )
@@ -65,8 +64,7 @@ public class AuthenticationController {
         ),
         @ApiResponse(
             code = org.apache.http.HttpStatus.SC_UNAUTHORIZED,
-            message = "Authentication failed with supplied credentials",
-            response = ErrorView.class
+            message = "Authentication failed with supplied credentials"
         )
     })
     @ResponseStatus(HttpStatus.CREATED)

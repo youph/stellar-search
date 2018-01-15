@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A representation of list of view of extended property graph meta data",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "name",
+      "created",
+      "createdBy",
+      "status",
+      "createdFrom"
+    ],
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "created": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "createdBy": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "INDEXING",
+          "COMPLETE",
+          "DELETING"
+        ]
+      },
+      "createdFrom": {
+        "type": "object",
+        "required": [
+          "graphs",
+          "vertices",
+          "edges"
+        ],
+        "properties": {
+          "graphs": {
+            "type": "string",
+            "format": "uri"
+          },
+          "vertices": {
+            "type": "string",
+            "format": "uri"
+          },
+          "edges": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+  }
+}

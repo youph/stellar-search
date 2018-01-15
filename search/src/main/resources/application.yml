@@ -19,3 +19,4 @@ jwt:
 elasticsearch.rest-client:
   addresses:
     - localhost:9200
+

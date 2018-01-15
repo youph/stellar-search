@@ -101,7 +101,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-resources/**",
                 "/configuration/**",
                 "/swagger-ui.html",
-                "/webjars/**"
+                "/webjars/**",
+                "/h2-console/*"
             ).permitAll()
 
             // permit POSTing to auth for obtaining tokens
@@ -116,7 +117,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .cors().and()
 
             // disable page caching
-            .headers().cacheControl();
+            .headers().cacheControl().and()
+
+            // needed for /h2-console
+            .frameOptions().sameOrigin();
 
     }
 

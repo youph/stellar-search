@@ -13,10 +13,27 @@
         Investigative Analytics - Root Aggregator Pom
     </description>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
     <organization>
-        <name>Data to Decisions CRC</name>
-        <url>http://www.d2dcrc.com.au</url>
+        <name>Data 61</name>
+        <url>https://www.data61.csiro.au/</url>
     </organization>
+
+    <developers>
+        <developer>
+            <name>Data to Decisions CRC</name>
+            <organization>D2DCRC</organization>
+            <organizationUrl>http://www.d2dcrc.com.au/</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
         <!-- project -->
@@ -31,6 +48,7 @@
         <guava.version>23.5-jre</guava.version>
         <jackson.version>2.9.2</jackson.version>
         <postgresql.version>9.4.1212</postgresql.version>
+        <restassured.version>3.0.6</restassured.version>
         <snakeyaml.version>1.19</snakeyaml.version>
         <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
         <spring.security.version>4.2.3.RELEASE</spring.security.version>

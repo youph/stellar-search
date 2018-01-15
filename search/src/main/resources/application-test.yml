@@ -1,11 +1,23 @@
 ---
 logging:
   level:
+    root: INFO
     au.com.d2dcrc: DEBUG
 
 spring:
   profiles:
     include:
       - h2
+
   datasource:
-    url: jdbc:h2:mem:discovery;IGNORECASE=TRUE;
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
+
+  main:
+    # we don't want the banner shown for each test
+    banner-mode: "off"  # quoted since this is not a boolean but an enum (console, log, off)
+
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    hibernate:
+      ddl-auto: validate

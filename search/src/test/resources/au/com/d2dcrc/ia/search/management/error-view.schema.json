@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "An error view",
+  "type": "object",
+  "required": [
+    "path",
+    "status",
+    "error",
+    "timestamp",
+    "message"
+  ],
+  "properties": {
+    "path": {
+      "type": "string",
+      "format": "uri-reference"
+    },
+    "status": {
+      "type": "number"
+    },
+    "error": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}

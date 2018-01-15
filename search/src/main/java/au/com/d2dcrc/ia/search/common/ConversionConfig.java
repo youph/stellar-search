@@ -1,5 +1,6 @@
 package au.com.d2dcrc.ia.search.common;
 
+import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;

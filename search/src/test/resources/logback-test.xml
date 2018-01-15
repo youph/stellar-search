@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is needed for non spring tests and for org.springframework.test.context.junit4.SpringRunner
+  to run at INFO not DEBUG since the logging framework is initialised very early in the bootstrap phase
+  (before spring). After the bootstrap phase, logging in the spring application property files can
+  be used
+-->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="root" level="INFO"/>
+</configuration>

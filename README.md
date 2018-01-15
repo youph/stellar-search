@@ -11,7 +11,7 @@
 
 ### Development Prerequisites (For MacOS)
  
- * [HomeBrew](https://brew.sh/)
+ * [HomeBrew](https://brew.sh/) 
  
  * Oracle JDK 8+
    ```bash
@@ -68,22 +68,24 @@ Authenticate as the following test user to obtain a [JSON Web Token](https://jwt
 curl -XPOST -H "Content-Type: application/json" -d '{
   "username": "test-user",
   "password": "only-for-development"
-}' http://localhost:8080/api/v1/auth
+}' http://localhost:8080/api/v1.0/auth
 ```
 
 The response JSON body will have the token in the `jwt` field. JWT is valid for 30 days by default
-and persists between app restarts 
+and persists between app restarts.
 
-Include the JWT in the Authorization header for all subsequent requests. E.g
+Include the JWT in the Authorization header for all subsequent requests. For example to create a 
+new IMDB Extended Property Graph (EPG) Index
 ```bash
+env BASE_PATH="file:$(pwd)/search/src/test/resources/au/com/d2dcrc/ia/search/epg/" \
 curl -XPOST \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer xxxxx.yyyyy.zzzzz" \
   -d '{
-  "name": "New task",
-  "description": "Some description",
-  "dateTime": "2015-01-03T00:00:00+10:30"
-}' http://localhost:8080/api/v1/example/task/
+  "graphs": "'"${BASE_PATH}/imdb-graphs.json"'",
+  "edges": "'"${BASE_PATH}/imdb-edges.json"'",
+  "vertices": "'"${BASE_PATH}/imdb-vertices.json"'"
+}' http://localhost:8080/api/v1.0/indexes/imdb
 ```
 
 See Postman section on how to do this automatically
@@ -147,23 +149,20 @@ additive profiles such as
 allows for having the 'locked-down' file permissions readable only by the service user, whilst still allowing
 public configuration world-readable that are used across all environmental profiles.
 
-### There are so many property files now! Where do I add new properties?
+## Developer tools
 
-#### Basic property files
+Spring Boot automatically provides additional set of tools for development. Developer tools are
+automatically disabled when running a fully packaged application. If your application is launched
+using java -jar or if it’s started using a special classloader, then it is considered a
+“production application”
 
-These property files are never referenced as a profile directly when running the application. They are simply included 
-by other profiles in order to have sensible defaults in the same place, and allow composition depending on the mode the 
-application is being run in
- 
-**application-db-common.yml** - properties that are truly common to all JPA database providers  
-**application-h2.yml** - common properties specific to the H2 database  
-**application-postgres.yml** - common properties specific to postgres  
+A browser based H2 web console is available for development at 
+[http://localhost:8080/h2-console/](http://localhost:8080/h2-console/)
 
-#### Application specific properties
+See [Spring Boot Devtools](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-devtools)
+for more info on using devtools for automatic restart and live-reload.
 
-Any app specific property should go into the respective `application-{develop|test|staging|production}.yml` file.
-
-# Git workflow
+## Git workflow
 [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) is used for
 the branching model and the maven [jgitflow](https://bitbucket.org/atlassian/jgit-flow/wiki/Home)
 plugin is used for release branch management, artifact deployment and tagging. 
@@ -179,7 +178,7 @@ be prefixed with `JIRA-ID: ` in uppercase.
 
 Feature branches should ideally be squash committed, then rebased onto develop.
 
-# Codestyle
+## Codestyle
 
 We use the [Google Java Code Style](https://google.github.io/styleguide/javaguide.html) with the 
 following exceptions
@@ -252,7 +251,7 @@ This code style in enforced (where it can) by the maven build by the checkstyle 
 [http://checkstyle.sourceforge.net/google_style.html](http://checkstyle.sourceforge.net/google_style.html) 
 checkstyle configuration.
 
-# Resources
+## Resources
 
 * [Spring Boot Reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
 * [Spring Framework Reference](https://docs.spring.io/spring/docs/current/spring-framework-reference/)

@@ -1,5 +1,7 @@
 package au.com.d2dcrc.ia.search.security;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -17,7 +19,7 @@ public class JwtView {
      *
      * @param jwt the token to encapsulate
      */
-    public JwtView(final String jwt) {
+    public JwtView(@JsonProperty("jwt") final String jwt) {
         this.jwt = jwt;
     }
 

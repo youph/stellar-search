@@ -1,6 +1,5 @@
 package au.com.d2dcrc.ia.search.security;
 
-import au.com.d2dcrc.ia.search.example.ExampleRestController;
 import au.com.d2dcrc.ia.search.user.UserRepositoryJpa;
 
 import org.springframework.security.core.userdetails.User;
@@ -42,7 +41,7 @@ public class UserDetailsManagerImpl implements UserDetailsManager {
         return new User(
             applicationUser.getUsername(),
             applicationUser.getPassword(),
-            Collections.singleton(ExampleRestController.CAN_CREATE_TASKS_AUTHORITY)  // TODO: get auths from DB
+            Collections.emptyList()  // TODO: get auths from DB
         );
     }
 

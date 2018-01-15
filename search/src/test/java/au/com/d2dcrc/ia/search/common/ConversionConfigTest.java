@@ -1,5 +1,7 @@
 package au.com.d2dcrc.ia.search.common;
 
+import au.com.d2dcrc.ia.search.BaseSpringTest;
+
 import static org.junit.Assert.assertEquals;
 
 import java.time.Duration;
@@ -16,14 +18,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Tests the additional converters in the conversion service
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = ConversionConfig.class)
-public class ConversionConfigTest {
+public class ConversionConfigTest extends BaseSpringTest {
 
     @Inject
     private ConversionService conversionService;
