@@ -1,0 +1,18 @@
+{
+  "node": {
+    "label": "Film",
+    "properties": {
+      "classification": "Thriller"
+    },
+    "relation": {
+      "direction": "in",
+      "label": "actedin",
+      "node": {
+        "label": "Person",
+        "properties": {
+          "name": "Clint Eastwood"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "node": {
+    "label": "Person",
+    "properties": {
+      "name": "Clint"
+    }
+  }
+}

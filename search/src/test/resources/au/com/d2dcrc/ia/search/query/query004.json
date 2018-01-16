@@ -1,0 +1,17 @@
+{
+  "node": {
+    "label": "Film",
+    "properties": {
+    },
+    "relation": {
+      "direction": "in",
+      "label": "actedin",
+      "node": {
+        "label": "Person",
+        "properties": {
+          "name": "Clint Eastwood"
+        }
+      }
+    }
+  }
+}
