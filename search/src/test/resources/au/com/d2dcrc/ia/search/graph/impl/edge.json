@@ -1,0 +1,10 @@
+{
+      "id": "342D5869102440778B69FDF03756C850",
+      "label": "isRelatedTo",
+      "properties": {
+          "relationship" : "sibling"
+      },
+      "source": "342D5869102440778B69FDF03756C853",
+      "target": "342D5869102440778B69FDF03756C851",
+      "graphs": [ "342D5869102440778B69FDF03756C858" ]
+}

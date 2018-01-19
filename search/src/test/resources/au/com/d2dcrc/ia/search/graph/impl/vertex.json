@@ -1,0 +1,9 @@
+{
+    "id": "342D5869102440778B69FDF03756C853",
+    "label": "iamanode",
+    "properties": {
+        "name" : "Slow Fred",
+        "IQ" : 42
+    },
+    "graphs": [ "342D5869102440778B69FDF03756C858" ]
+}
