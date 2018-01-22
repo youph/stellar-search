@@ -16,3 +16,6 @@ spring:
 
 # needed for /h2-console
 security.basic.enabled: false
+# turn off authentication for actuator
+spring.security.enabled: false
+management.security.enabled: false

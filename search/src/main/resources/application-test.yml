@@ -21,3 +21,8 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: validate
+
+# turn off authentication for actuator
+security.basic.enabled: false
+spring.security.enabled: false
+management.security.enabled: false
