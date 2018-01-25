@@ -108,15 +108,6 @@
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-client</artifactId>
-        </dependency>
-        <dependency>
-            <!-- This can be removed once the elasticsearch-rest-client add support for all required operations -->
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>transport</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -178,6 +169,53 @@
                 <!-- Build a self-executing jar -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+
+            </plugin>
+
+            <plugin>
+                <!-- For building docker images and running containers for integration test-->
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+
+                <configuration>
+                    <showLogs>true</showLogs>
+                    <images>
+                        <image>
+                            <alias>elasticsearch</alias>
+                            <name>docker.elastic.co/elasticsearch/elasticsearch-oss:${elasticsearch.version}</name>
+                            <run>
+                                <env>
+                                    <ES_JAVA_OPTS>-Xmx256m -Xms256m</ES_JAVA_OPTS>
+                                </env>
+                                <ulimits>
+                                    <ulimit>
+                                        <name>memlock</name>
+                                        <hard>-1</hard>
+                                        <soft>-1</soft>
+                                    </ulimit>
+                                </ulimits>
+                                <wait>
+                                    <http>
+                                        <url>http://localhost:9200/</url>
+                                    </http>
+                                    <time>10000</time>
+                                </wait>
+                                <ports>
+                                    <port>9200:9200</port>
+                                </ports>
+                                <log>
+                                    <enabled>true</enabled>
+                                </log>
+                                <volumes>
+                                    <bind>
+                                        <volume>src/test/docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro</volume>
+                                    </bind>
+                                </volumes>
+                            </run>
+                        </image>
+                    </images>
+
+                </configuration>
 
             </plugin>
         </plugins>

@@ -1,6 +1,17 @@
 language: java
 jdk: oraclejdk8
 
+# need for docker daemon
+sudo: required
+
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 branches:
   only:
   - master
