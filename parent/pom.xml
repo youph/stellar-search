@@ -582,7 +582,11 @@
                 </plugin>
 
                 <plugin>
-                    <!-- For building docker images and running containers for integration test-->
+                    <!--
+                      For running docker containers for integration test. Note we do not use
+                      this plugin for building docker images for various reasons. Instead use
+                      com.spotify:dockerfile-maven-plugin which is better.
+                    -->
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>0.23.0</version>
@@ -594,6 +598,31 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+
+                <plugin>
+                    <!--
+                      For building docker images during the build. This plugin doesn't run containers
+                      for integration tests, see the former
+                    -->
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>1.3.7</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>push</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <repository>data61/stellar-search</repository>
+                        <tag>${project.version}</tag>
+                        <buildArgs>
+                            <JAR_FILE>target/${project.build.finalName}-exec.jar</JAR_FILE>
+                        </buildArgs>
+                    </configuration>
                 </plugin>
 
             </plugins>
