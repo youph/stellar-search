@@ -186,12 +186,12 @@
             <dependency>
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
-                <version>2.0.0.Final</version>
+                <version>2.0.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
-                <version>3.1.0</version>
+                <version>4.0.0</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
@@ -216,7 +216,7 @@
             <dependency>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-core</artifactId>
-                <version>4.2.0</version>
+                <version>5.0.6</version>
             </dependency>
             <dependency>
                 <groupId>org.postgresql</groupId>
@@ -284,7 +284,7 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <scope>test</scope>
-                <version>2.10.0</version>
+                <version>2.13.0</version>
             </dependency>
 
             <dependency>
@@ -334,8 +334,10 @@
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <compilerArgs>
-                            <arg>-parameters</arg> <!-- needed for jackson parameter name reflection (requires target 1.8+) -->
-                            <arg>-Xlint:all</arg>
+                            <!-- needed for jackson parameter name reflection (requires target 1.8+) -->
+                            <arg>-parameters</arg>
+                            <!-- see https://github.com/spring-projects/spring-boot/issues/6421 -->
+                            <arg>-Xlint:all,-processing</arg>
                         </compilerArgs>
                         <failOnWarning>true</failOnWarning>
                         <showWarnings>true</showWarnings>
@@ -475,7 +477,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>8.7</version>
+                            <version>8.8</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -523,7 +525,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>2.5</version>
                     <executions>
                         <!-- Automatically update children to use the latest parent pom -->
                         <execution>
@@ -557,6 +559,7 @@
                             </goals>
                             <configuration>
                                 <processDependencyManagement>false</processDependencyManagement>
+                                <rulesUri>classpath:///version-rules.xml</rulesUri>
                             </configuration>
                         </execution>
                         <!-- For this pom only, print a list of outdated managed dependencies -->
@@ -569,9 +572,17 @@
                             </goals>
                             <configuration>
                                 <processDependencies>false</processDependencies>
+                                <rulesUri>classpath:///version-rules.xml</rulesUri>
                             </configuration>
                         </execution>
                     </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>au.com.d2dcrc.ia</groupId>
+                            <artifactId>ia-build-tools</artifactId>
+                            <version>${project.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <plugin>
