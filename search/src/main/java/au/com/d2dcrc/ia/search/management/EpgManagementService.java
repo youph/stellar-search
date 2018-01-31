@@ -1,16 +1,15 @@
 package au.com.d2dcrc.ia.search.management;
 
-import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.stereotype.Service;
 
 /**
  * This is a Stub EPG Management Service, it has no business logic currently other than
@@ -93,7 +92,7 @@ public class EpgManagementService {
      * @param name the name fo the EPG index to find
      * @return a view of the metadata of the EPG or null if none exists
      */
-    public EpgMetaView findEpg(final String name) {
+    public @Nullable EpgMetaView findEpg(final String name) {
         final EpgMetaEntity metaEntity = metaRepo.findOne(name);
         return  (metaEntity == null) ?  null : metaEntity.toView();
     }

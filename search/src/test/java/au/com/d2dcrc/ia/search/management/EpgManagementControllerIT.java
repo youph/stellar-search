@@ -1,8 +1,16 @@
 package au.com.d2dcrc.ia.search.management;
 
+import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayWithSize;
+import static org.junit.Assert.assertArrayEquals;
 import au.com.d2dcrc.ia.search.BaseSpringTest;
 import au.com.d2dcrc.ia.search.epg.EpgReferenceFixtures;
-
+import java.net.MalformedURLException;
+import java.net.URL;
+import javax.inject.Inject;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,21 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.inject.Inject;
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-
-import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.arrayWithSize;
 
 /**
  * Integration test for the EPG Management Controller.
@@ -73,43 +68,54 @@ public class EpgManagementControllerIT extends BaseSpringTest {
     }
 
     @Test
-    public void testListEmptyIndexes() throws Exception {
-        final EpgMetaView[] epgMetaViewGetAll = getAllEpgs();
-        assertThat(epgMetaViewGetAll, arrayWithSize(0));
-    }
-
-    @Test
     public void testCreateIndex() {
         final EpgReferenceModel epgReferenceModel = EpgReferenceFixtures.IMDB_EPG_REFERENCE_MODEL;
-        createEpg(epgReferenceModel, "imdb");
-    }
+        assertThat(getAllEpgs(), arrayWithSize(0));
 
+        createEpgWhenNotExists(epgReferenceModel, "imdb");
+        assertThat(getAllEpgs(), arrayWithSize(1));
+
+        createEpgWhenDoesExist(epgReferenceModel, "imdb");
+        assertThat(getAllEpgs(), arrayWithSize(1));
+    }
 
     @Test
     public void testGetEpgIndex() {
         final EpgReferenceModel epgReferenceModel = EpgReferenceFixtures.IMDB_EPG_REFERENCE_MODEL;
-        final EpgMetaView epgMetaViewCreated = createEpg(epgReferenceModel, "imdb");
+        final EpgMetaView epgMetaViewCreated = createEpgWhenNotExists(epgReferenceModel, "imdb");
         final EpgMetaView epgMetaViewGetByName = getEpg("imdb");
         assertThat(epgMetaViewGetByName, is(epgMetaViewCreated));
     }
 
     @Test
-    public void testGetAllEpgIndex() {
+    public void testDeleteEpgIndex() {
         final EpgReferenceModel epgReferenceModel = EpgReferenceFixtures.IMDB_EPG_REFERENCE_MODEL;
-        final EpgMetaView epgMetaViewCreated = createEpg(epgReferenceModel, "imdb");
-        final EpgMetaView[] epgMetaViewGetAll = getAllEpgs();
-        assertThat(epgMetaViewGetAll, arrayWithSize(1));
-        assertThat(epgMetaViewGetAll[0], is(epgMetaViewCreated));
+        createEpgWhenNotExists(epgReferenceModel, "imdb");
+
+        deleteEpgWhenDoesExist("imdb");
+        assertThat(getAllEpgs(), arrayWithSize(0));
+
+        deleteEpgWhenNotExists("imdb");
+        assertThat(getAllEpgs(), arrayWithSize(0));
     }
 
     @Test
-    public void testDeleteEpgIndex() {
+    public void testGetAllEpgIndex() {
         final EpgReferenceModel epgReferenceModel = EpgReferenceFixtures.IMDB_EPG_REFERENCE_MODEL;
-        createEpg(epgReferenceModel, "imdb");
-        deleteEpg("imdb");
+        final EpgMetaView view1 = createEpgWhenNotExists(epgReferenceModel, "imdb");
+        assertThat(getAllEpgs(), arrayWithSize(1));
+        assertArrayEquals(getAllEpgs(), new EpgMetaView[] { view1 });
+
+        final EpgMetaView view2 = createEpgWhenNotExists(epgReferenceModel, "imdb2");
+        assertThat(getAllEpgs(), arrayWithSize(2));
+        assertArrayEquals(getAllEpgs(), new EpgMetaView[] { view1, view2 });
+
+        final EpgMetaView view3 = createEpgWhenNotExists(epgReferenceModel, "imdb3");
+        assertThat(getAllEpgs(), arrayWithSize(3));
+        assertArrayEquals(getAllEpgs(), new EpgMetaView[] { view1, view2, view3 });
     }
 
-    private EpgMetaView createEpg(
+    private EpgMetaView createEpgWhenNotExists(
         final EpgReferenceModel epgReferenceModel,
         final String name
     ) {
@@ -149,6 +155,20 @@ public class EpgManagementControllerIT extends BaseSpringTest {
         return view;
     }
 
+    private void createEpgWhenDoesExist(final EpgReferenceModel epgReferenceModel, final String name) {
+        final String path = "/api/v1.0/indexes/" + name;
+
+        given()
+            .contentType(ContentType.JSON).body(epgReferenceModel)
+
+            .when().post(path)
+
+            .then()
+            .contentType(ContentType.JSON)
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .body(matchesJsonSchema(getClass().getResource("error-view.schema.json")));
+    }
+
     private EpgMetaView getEpg(final String name) {
         return given()
             .contentType(ContentType.JSON)
@@ -181,7 +201,7 @@ public class EpgManagementControllerIT extends BaseSpringTest {
             .as(EpgMetaView[].class);
     }
 
-    private void deleteEpg(final String name) {
+    private void deleteEpgWhenDoesExist(final String name) {
         given()
             .contentType(ContentType.JSON)
 
@@ -190,6 +210,18 @@ public class EpgManagementControllerIT extends BaseSpringTest {
 
             .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    private void deleteEpgWhenNotExists(final String name) {
+        given()
+            .contentType(ContentType.JSON)
+
+            .when()
+            .delete("/api/v1.0/indexes/" + name)
+
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .body(matchesJsonSchema(getClass().getResource("error-view.schema.json")));
     }
 
 }

@@ -5,9 +5,10 @@
   "required": [
     "path",
     "status",
+    "reason",
     "error",
-    "timestamp",
-    "message"
+    "message",
+    "timestamp"
   ],
   "properties": {
     "path": {
@@ -17,15 +18,18 @@
     "status": {
       "type": "number"
     },
+    "reason": {
+      "type": "string"
+    },
     "error": {
+      "type": "string"
+    },
+    "message": {
       "type": "string"
     },
     "timestamp": {
       "type": "string",
       "format": "date-time"
-    },
-    "message": {
-      "type": "string"
     }
   }
 }

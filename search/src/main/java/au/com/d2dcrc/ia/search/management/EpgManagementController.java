@@ -1,5 +1,11 @@
 package au.com.d2dcrc.ia.search.management;
 
+import au.com.d2dcrc.ia.search.response.ErrorView;
+import au.com.d2dcrc.ia.search.response.NoView;
+import java.net.URI;
+import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -10,18 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ResponseHeader;
 
 @Api("Management of Extended Property Graphs (EPGs)")
@@ -85,13 +87,27 @@ public class EpgManagementController {
      *
      * @param name the name of the EPG index to create
      * @param epgReference references to the resources the describe the EPG
-     * @return a view of the created EPG meta data
+     * @return a view of the created EPG meta data if successful,
+     *          or a HTTP 400 Bad Request status if failed.
      */
     @ApiOperation(
         value = "Create an EPG",
         code = org.apache.http.HttpStatus.SC_CREATED,
         responseHeaders = @ResponseHeader(name = HttpHeaders.LOCATION)
     )
+    @ApiResponses(value = { 
+        @ApiResponse(
+            code = org.apache.http.HttpStatus.SC_CREATED, 
+            message = "Created", 
+            response = EpgMetaView.class
+        ), 
+        @ApiResponse(
+            code = org.apache.http.HttpStatus.SC_BAD_REQUEST, 
+            message = "Bad Request", 
+            response = ErrorView.class
+        ) 
+    })
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/{name}", method = RequestMethod.POST)
     public ResponseEntity<EpgMetaView> createEpg(
         @ApiParam(value = "EPG index name", required = true)
@@ -114,32 +130,37 @@ public class EpgManagementController {
         final HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
         return new ResponseEntity<>(newEpg, headers, HttpStatus.CREATED);
-
     }
 
     /**
      * Deletes an EPG index.
      *
-     * @param name the name of the EPG index to delete
-     * @return HTTP 204 No Content on success
+     * @param name
+     *            the name of the EPG index to delete
+     * @return HTTP 204 No Content on success, or 400 Bad request on failure.
      */
     @ApiOperation(value = "Delete an EPG", code = org.apache.http.HttpStatus.SC_NO_CONTENT)
+    @ApiResponses(value = { 
+        @ApiResponse(
+            code = org.apache.http.HttpStatus.SC_NO_CONTENT, 
+            message = "No Content",
+            response = NoView.class
+        ), 
+        @ApiResponse(
+            code = org.apache.http.HttpStatus.SC_BAD_REQUEST, 
+            message = "Bad Request", 
+            response = ErrorView.class
+        ) 
+    })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(value = "/{name}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteEpg(
         @ApiParam(value = "EPG index name", required = true)
         @PathVariable
         final String name
     ) {
-
         logger.debug("Deleting EPG: {}", name);
-
-        final EpgMetaView currentEpg = managementService.findEpg(name);
-
-        if (currentEpg != null) {
-            // todo if async, return 202 Accepted?
-            managementService.deleteEpg(name);
-        }
-
+        managementService.deleteEpg(name);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

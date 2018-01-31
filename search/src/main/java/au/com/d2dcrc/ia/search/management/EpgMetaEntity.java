@@ -2,7 +2,6 @@ package au.com.d2dcrc.ia.search.management;
 
 import java.net.URI;
 import java.time.Instant;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -64,7 +63,7 @@ public class EpgMetaEntity {
     }
 
     /**
-     * Converts this JPA entity to a Task view.
+     * Converts this JPA entity to an EPG meta view.
      *
      * @return the view
      */
