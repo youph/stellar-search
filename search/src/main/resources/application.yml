@@ -1,7 +1,6 @@
 ---
 spring:
-  profiles.include:
-    - secrets
+  profiles.include: []
   jackson:
     serialization:
       # Serialise/Deserialise java 8 datetimes as ISO 6801 strings

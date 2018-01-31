@@ -1,13 +1,7 @@
 package au.com.d2dcrc.ia.search.query;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Api(description = "Make graph search queries")
 @RestController
@@ -27,7 +26,7 @@ public class QueryRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(QueryRestController.class);
 
-    QueryService queryService;
+    private final QueryService queryService;
 
     /**
      * Constructor.
@@ -45,13 +44,6 @@ public class QueryRestController {
      * @return a query result
      */
     @ApiOperation("Perform a search")
-    @ApiImplicitParams(
-        @ApiImplicitParam(
-            name = HttpHeaders.AUTHORIZATION,
-            paramType = "header",
-            required = true
-        )
-    )
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<QueryResultView> search(
         @RequestBody

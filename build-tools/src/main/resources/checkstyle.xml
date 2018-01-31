@@ -211,5 +211,8 @@
             <property name="exceptionVariableName" value="expected"/>
         </module>
         <module name="CommentsIndentation"/>
+
+        <!-- Custom Investigative Analytics modules -->
+        <module name="UnusedImports"/>
     </module>
 </module>

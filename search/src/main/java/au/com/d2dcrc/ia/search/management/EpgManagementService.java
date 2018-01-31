@@ -1,7 +1,5 @@
 package au.com.d2dcrc.ia.search.management;
 
-import au.com.d2dcrc.ia.search.user.User;
-
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-
 
 /**
  * This is a Stub EPG Management Service, it has no business logic currently other than
@@ -61,14 +58,12 @@ public class EpgManagementService {
      *
      * @param name the name of the EPG to create
      * @param epgReference the reference to graphs, nodes and vertices to index
-     * @param principal the principle who made the request
      * @return a view of meta data the newly created EPG index
      * @throws EntityExistsException if an EPG with name already exists
      */
     public EpgMetaView createEpg(
         final String name,
-        final EpgReferenceModel epgReference,
-        final String principal
+        final EpgReferenceModel epgReference
     ) throws EntityExistsException {
 
         if (metaRepo.exists(name)) {
@@ -78,13 +73,10 @@ public class EpgManagementService {
         // todo utilise optimistic concurrency to avoid race condition
         // between check and save as an alternative to database locking
 
-        final User user = entityManager.getReference(User.class, principal);
-
         final EpgMetaEntity metaEntity = new EpgMetaEntity(
             name,
             Instant.now(),
             EpgStatus.INDEXING,
-            user,
             epgReference.getGraphs(),
             epgReference.getVertices(),
             epgReference.getEdges()

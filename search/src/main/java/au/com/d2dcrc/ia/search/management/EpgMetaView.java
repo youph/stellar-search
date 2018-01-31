@@ -24,10 +24,6 @@ public class EpgMetaView {
     @NotNull
     private final Instant created;
 
-    @ApiModelProperty(value = "Who created the index", required = true, example = "test-user")
-    @NotEmpty
-    private final String createdBy;
-
     @ApiModelProperty(value = "The status of the index", required = true, example = "INDEXING")
     @NotEmpty
     private final String status;
@@ -43,25 +39,21 @@ public class EpgMetaView {
      *
      * @param name the name of the EPG
      * @param created the time the EPG was created
-     * @param createdBy the principal who created the EPG
      * @param status the status of the EPG
      * @param createdFrom a triple of graphs, vertexes and edges resources used to create the EPG
      */
     public EpgMetaView(
         final String name,
         final Instant created,
-        final String createdBy,
         final String status,
         final ResourceReference createdFrom
     ) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(created);
-        Objects.requireNonNull(createdBy);
         Objects.requireNonNull(status);
         Objects.requireNonNull(createdFrom);
         this.name = name;
         this.created = created;
-        this.createdBy = createdBy;
         this.status = status;
         this.createdFrom = createdFrom;
     }
@@ -72,10 +64,6 @@ public class EpgMetaView {
 
     public Instant getCreated() {
         return created;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
     }
 
     public String getStatus() {
@@ -103,9 +91,6 @@ public class EpgMetaView {
         if (!created.equals(that.created)) {
             return false;
         }
-        if (!createdBy.equals(that.createdBy)) {
-            return false;
-        }
         if (!status.equals(that.status)) {
             return false;
         }
@@ -116,7 +101,6 @@ public class EpgMetaView {
     public int hashCode() {
         int result = name.hashCode();
         result = 31 * result + created.hashCode();
-        result = 31 * result + createdBy.hashCode();
         result = 31 * result + status.hashCode();
         result = 31 * result + createdFrom.hashCode();
         return result;

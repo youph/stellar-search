@@ -1,6 +1,5 @@
 package au.com.d2dcrc.ia.search.elastic;
 
-import java.util.function.Consumer;
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.elasticsearch.client.RestClient;
@@ -9,6 +8,8 @@ import org.elasticsearch.client.RestClientBuilder.RequestConfigCallback;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.function.Consumer;
 
 /**
  * Configuration properties supporting Elasticsearch.

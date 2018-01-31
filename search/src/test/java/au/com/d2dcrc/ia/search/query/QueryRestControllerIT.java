@@ -2,28 +2,18 @@ package au.com.d2dcrc.ia.search.query;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.is;
 
 import au.com.d2dcrc.ia.search.BaseSpringTest;
-import au.com.d2dcrc.ia.search.common.JwtAuthFilter;
-import au.com.d2dcrc.ia.search.security.CredentialModel;
-import au.com.d2dcrc.ia.search.security.JwtView;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import java.io.IOException;
 import javax.inject.Inject;
-import javax.validation.constraints.AssertTrue;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.web.BasicErrorController;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
@@ -33,19 +23,7 @@ public class QueryRestControllerIT extends BaseSpringTest {
     private static final Logger logger = LoggerFactory.getLogger(QueryRestControllerIT.class);
 
     @Inject
-    ObjectMapper mapper;
-
-    /**
-     * Sets the authentication filter before each test.
-     *
-     * <p>Authentication can be disabled by `given().auth().none()`
-     */
-    @Before
-    public void before() {
-        // create a new JWT auth filter (with new token) before each test
-        // this needs to be done after setting the port
-        RestAssured.replaceFiltersWith(auth());
-    }
+    private ObjectMapper mapper;
 
     /**
      * Tests the search endpoint. All valid requests currently return the same mock response
@@ -135,26 +113,4 @@ public class QueryRestControllerIT extends BaseSpringTest {
             .contentType(ContentType.JSON);
     }
 
-    private static JwtAuthFilter auth() {
-
-        final CredentialModel creds = new CredentialModel(
-            "test-user",
-            "only-for-development"
-        );
-
-        final JwtView jwtView = given()
-            .contentType(ContentType.JSON)
-            .body(creds)
-
-            .when()
-            .post("/api/v1.0/auth")
-
-            .then()
-            .statusCode(HttpStatus.CREATED.value())
-            .contentType(ContentType.JSON)
-            .extract()
-            .as(JwtView.class);
-
-        return new JwtAuthFilter(jwtView.getJwt());
-    }
 }

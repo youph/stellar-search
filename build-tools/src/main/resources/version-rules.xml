@@ -9,5 +9,7 @@
         <ignoreVersion type="regex">(?i).*[-_\.]rc[0-9\.]*</ignoreVersion>
         <ignoreVersion type="regex">(?i).*[-_\.]beta[0-9\.-]*</ignoreVersion>
         <ignoreVersion type="regex">(?i).*[-_\.]alpha[0-9\.-]*</ignoreVersion>
+        <ignoreVersion type="regex">(?i).*[-_\.]jre6[\.-]*</ignoreVersion>
+        <ignoreVersion type="regex">(?i).*[-_\.]jre7[\.-]*</ignoreVersion>
     </ignoreVersions>
 </ruleset>

@@ -2,7 +2,6 @@ package au.com.d2dcrc.ia.search.common;
 
 import java.net.URI;
 import java.time.ZoneId;
-import java.util.function.Function;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

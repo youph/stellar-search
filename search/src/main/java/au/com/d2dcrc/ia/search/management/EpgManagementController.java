@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,15 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ResponseHeader;
@@ -56,15 +52,6 @@ public class EpgManagementController {
      * @return a list of EPG meta views
      */
     @ApiOperation("Retrieve all EPGs")
-    @ApiImplicitParams(
-        @ApiImplicitParam(
-            name = HttpHeaders.AUTHORIZATION,
-            value = "The JWT",
-            paramType = "header",
-            required = true,
-            example = "Bearer xxxxx.yyyyy.zzzzz"
-        )
-    )
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<EpgMetaView> listAllEpgs() {
         logger.debug("Fetching all EPGs");
@@ -78,15 +65,6 @@ public class EpgManagementController {
      * @return a HTTP 200 with the view if found, else HTTP 404 Not found
      */
     @ApiOperation("Retrieve an EPG")
-    @ApiImplicitParams(
-        @ApiImplicitParam(
-            name = HttpHeaders.AUTHORIZATION,
-            value = "The JWT",
-            paramType = "header",
-            required = true,
-            example = "Bearer xxxxx.yyyyy.zzzzz"
-        )
-    )
     @RequestMapping(value = "/{name}", method = RequestMethod.GET)
     public ResponseEntity<EpgMetaView> listEpg(
         @ApiParam(value = "EPG index name", required = true)
@@ -107,22 +85,12 @@ public class EpgManagementController {
      *
      * @param name the name of the EPG index to create
      * @param epgReference references to the resources the describe the EPG
-     * @param principal the principal who is creating the EPG
      * @return a view of the created EPG meta data
      */
     @ApiOperation(
         value = "Create an EPG",
         code = org.apache.http.HttpStatus.SC_CREATED,
         responseHeaders = @ResponseHeader(name = HttpHeaders.LOCATION)
-    )
-    @ApiImplicitParams(
-        @ApiImplicitParam(
-            name = HttpHeaders.AUTHORIZATION,
-            value = "The JWT",
-            paramType = "header",
-            required = true,
-            example = "Bearer xxxxx.yyyyy.zzzzz"
-        )
     )
     @RequestMapping(value = "/{name}", method = RequestMethod.POST)
     public ResponseEntity<EpgMetaView> createEpg(
@@ -134,11 +102,10 @@ public class EpgManagementController {
         @ApiParam(required = true)
         @Valid
         @RequestBody
-        final EpgReferenceModel epgReference,
-        final Principal principal
+        final EpgReferenceModel epgReference
     ) {
         logger.debug("Creating new EPG: {}", name);
-        final EpgMetaView newEpg = managementService.createEpg(name, epgReference, principal.getName());
+        final EpgMetaView newEpg = managementService.createEpg(name, epgReference);
 
         final URI location = ServletUriComponentsBuilder.fromCurrentRequest()
             .build()
@@ -157,17 +124,7 @@ public class EpgManagementController {
      * @return HTTP 204 No Content on success
      */
     @ApiOperation(value = "Delete an EPG", code = org.apache.http.HttpStatus.SC_NO_CONTENT)
-    @ApiImplicitParams(
-        @ApiImplicitParam(
-            name = HttpHeaders.AUTHORIZATION,
-            value = "The JWT",
-            paramType = "header",
-            required = true,
-            example = "Bearer xxxxx.yyyyy.zzzzz"
-        )
-    )
     @RequestMapping(value = "/{name}", method = RequestMethod.DELETE)
-    @GetMapping
     public ResponseEntity<?> deleteEpg(
         @ApiParam(value = "EPG index name", required = true)
         @PathVariable

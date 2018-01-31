@@ -1,24 +1,18 @@
 package au.com.d2dcrc.ia.search.management;
 
 import au.com.d2dcrc.ia.search.BaseSpringTest;
-import au.com.d2dcrc.ia.search.common.JwtAuthFilter;
 import au.com.d2dcrc.ia.search.epg.EpgReferenceFixtures;
-import au.com.d2dcrc.ia.search.security.CredentialModel;
-import au.com.d2dcrc.ia.search.security.JwtView;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 
 import javax.inject.Inject;
@@ -32,9 +26,6 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayWithSize;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 
 /**
  * Integration test for the EPG Management Controller.
@@ -66,18 +57,6 @@ public class EpgManagementControllerIT extends BaseSpringTest {
     }
 
     /**
-     * Sets the authentication filter before each test.
-     *
-     * <p>Authentication can be disabled by `given().auth().none()`
-     */
-    @Before
-    public void before() {
-        // create a new JWT auth filter (with new token) before each test
-        // this needs to be done after setting the port
-        RestAssured.replaceFiltersWith(auth());
-    }
-
-    /**
      * Clears the database after each test.
      *
      * <p>If you think you can do this with an @Transaction Annotation, you can't. Despite having a
@@ -91,32 +70,6 @@ public class EpgManagementControllerIT extends BaseSpringTest {
     @After
     public void after() {
         epgMetaRepository.deleteAll();
-    }
-
-
-    @Test
-    public void testUnauthenticatedRequest() throws Exception {
-
-        // in the future we should make these 401 UNAUTHORIZED,
-        // but a bit more work is required for that. We need to
-        // return a WWW-Authenticate header, etc. For now this is fine
-
-        given()
-            .contentType(ContentType.JSON)
-            .auth().none()
-
-            .when()
-            .get("/api/v1.0/indexes")
-
-            .then()
-            .statusCode(HttpStatus.FORBIDDEN.value())
-            .contentType(ContentType.JSON)
-            .body(matchesJsonSchema(getClass().getResource("error-view.schema.json")))
-            .body("status", equalTo(HttpStatus.FORBIDDEN.value()))
-            .body("error", equalTo("Forbidden"))
-            .body("path", equalTo("/api/v1.0/indexes"))
-            .body("message", not(isEmptyOrNullString()));
-
     }
 
     @Test
@@ -155,30 +108,6 @@ public class EpgManagementControllerIT extends BaseSpringTest {
         createEpg(epgReferenceModel, "imdb");
         deleteEpg("imdb");
     }
-
-    private static JwtAuthFilter auth() {
-
-        final CredentialModel creds = new CredentialModel(
-            "test-user",
-            "only-for-development"
-        );
-
-        final JwtView jwtView = given()
-            .contentType(ContentType.JSON)
-            .body(creds)
-
-            .when()
-            .post("/api/v1.0/auth")
-
-            .then()
-            .statusCode(HttpStatus.CREATED.value())
-            .contentType(ContentType.JSON)
-            .extract()
-            .as(JwtView.class);
-
-        return new JwtAuthFilter(jwtView.getJwt());
-    }
-
 
     private EpgMetaView createEpg(
         final EpgReferenceModel epgReferenceModel,
