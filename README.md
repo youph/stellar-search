@@ -2,10 +2,10 @@
 
 ## Build status
 
- |Branch|Status|
- |:-----|:----:|
- |*master*|[![Build Status](https://travis-ci.org/data61/stellar-search.svg?branch=master)](https://travis-ci.org/data61/stellar-search)|
- |*develop*|[![Build Status](https://travis-ci.org/data61/stellar-search.svg?branch=develop)](https://travis-ci.org/data61/stellar-search)|
+ |Branch|Status|Coverage|
+ |:-----|:----:|:----:|
+ |*master*|[![Build Status](https://travis-ci.org/data61/stellar-search.svg?branch=master)](https://travis-ci.org/data61/stellar-search)|[![Code Coverage](https://coveralls.io/repos/github/data61/stellar-search/badge.svg?branch=master)](https://coveralls.io/github/data61/stellar-search)|
+ |*develop*|[![Build Status](https://travis-ci.org/data61/stellar-search.svg?branch=develop)](https://travis-ci.org/data61/stellar-search)|[![Code Coverage](https://coveralls.io/repos/github/data61/stellar-search/badge.svg?branch=develop)](https://coveralls.io/github/data61/stellar-search)|
 
 ## Setup
 

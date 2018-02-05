@@ -18,7 +18,7 @@ branches:
   - develop
   - "/^feature.*$/"
 
-script: mvn clean verify
+script: mvn clean verify org.eluder.coveralls:coveralls-maven-plugin:report
 
 notifications:
   slack:
