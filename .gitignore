@@ -82,7 +82,7 @@ hs_err_pid*
 
 ### Investigative Analytics
 # h2 on disk DB
-develop.mv.db
+*.mv.db
 
 # Note: explicitly ignoring all files under .idea for the moment - we may wish to revert
 # to the .gitignore rules provided by Jetbreains (above) if we wish to, for instance, version codestyle,

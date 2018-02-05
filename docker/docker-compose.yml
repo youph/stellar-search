@@ -3,6 +3,24 @@ version: '3.4'
 
 services:
 
+  search:
+    # D2D don't have access to publish to internal CSIRO docker repo yet. You
+    # will need to ensure image is built by checking out stellar-search and
+    # building yourself.
+    image: data61/stellar-search:0.0.1-SNAPSHOT
+    command:
+      - "--spring.profiles.active=docker"
+      - "--spring.config.location=/etc/stellar-search/"
+    volumes:
+      - ./search/:/etc/stellar-search/:ro
+      - ./var:/opt/var/stellar-search/:rw
+    ports:
+      - "8080:8080"
+    depends_on:
+      - elasticsearch
+    networks:
+      - net
+
   elasticsearch:
     build:
       context: elasticsearch/
@@ -12,7 +30,6 @@ services:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
       - "9200:9200"
-      - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     ulimits:
@@ -23,7 +40,9 @@ services:
       - net
     healthcheck:
       # yellow (under replicated - which can happen for single node) and green status is considered healthy
-      test: ["CMD-SHELL", "curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&filter_path=status' | grep -qE '(green|yellow)' || exit 1"]
+      test:
+        - "CMD-SHELL"
+        - "curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s&filter_path=status' | grep -qE '(green|yellow)' || exit 1"
       interval: 1m
       timeout: 60s
       retries: 3
@@ -44,13 +63,13 @@ services:
       - elasticsearch
 
   db:
-    image: postgres:9
+    image: postgres:10
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
     ports:
-      - 5432:5432
+      - "5432:5432"
     networks:
       - net
 
@@ -58,7 +77,7 @@ services:
     image: adminer
     restart: always
     ports:
-        - 9090:8080
+      - "9090:8080"
     networks:
       - net
 

@@ -53,7 +53,11 @@ See `docker/README.md`
  
 ## Building 
 
-To compile, run checkstyle, unit/integration tests and generate a spring executable jar, run
+Your docker daemon must be running since the build will spin up and tear down an elasticsearch
+docker container for integration tests, and build a docker image of the application
+
+To compile, run checkstyle, unit/integration tests, generate a spring executable jar, and build
+a docker image `data61/stellar-search:<version>` of the application run
 ```bash
 mvn clean verify
 ```

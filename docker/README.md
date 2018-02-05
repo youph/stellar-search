@@ -1,13 +1,6 @@
 # Docker stack
 
-Based off [https://github.com/deviantony/docker-elk](https://github.com/deviantony/docker-elk)
-
-Stack contains
-
-* [elasticsearch](https://github.com/elastic/elasticsearch-docker)
-* [kibana](https://github.com/elastic/kibana-docker)
-* [postgres](https://hub.docker.com/_/postgres/)
-* [Adminer](https://www.adminer.org/)
+This docker stack is used for bringing up all dependant services needed for 
 
 See the parent README.md for installing Docker
 
@@ -15,21 +8,27 @@ See the parent README.md for installing Docker
 
 ### Bringing up the stack
 
-Start the stack using `docker-compose`:
+To bring up the development stack's dependencies (elasticsearch, kibana, db, etc)
 
 ```console
-docker-compose up
+./stack.sh up
 ```
 
-You can also choose to run it in background (detached mode):
+By default this won't start the apps docker image, since its not useful for development (since the app is usually
+run natively).
 
+If you wish to bring up all services including the app (useful for testing the apps docker image and configuration) - run
 ```console
-docker-compose up -d
+./stack.sh --all up
+```
+
+See the scripts help usage for more info
+```commandline
+./stack.sh --help
 ```
 
 By default, the stack exposes the following ports:
 * 9200: Elasticsearch HTTP
-* 9300: Elasticsearch TCP transport
 * 5601: Kibana
 * 9090: Adminer
 
@@ -54,13 +53,17 @@ Give Kibana a few seconds to initialize, then access the Kibana web UI by hittin
 Stop and remove containers, networks, images, and volumes
 
 ```console
-docker-compose down
+./stack.sh down
 ```
 
 ## Configuration
 
 **NOTE**: Configuration is not dynamically reloaded, you will need to restart the stack after any change in the
 configuration of a component.
+
+### How can I tune the app's docker configuration?
+
+The Apps docker configuration is stored in `search/application-docker.yml`.
 
 ### How can I tune the Kibana configuration?
 
@@ -71,30 +74,3 @@ It is also possible to map the entire `config` directory instead of a single fil
 ### How can I tune the Elasticsearch configuration?
 
 The Elasticsearch configuration is stored in `elasticsearch/config/elasticsearch.yml`.
-
-## Initial setup
-
-### Default Kibana index pattern creation
-
-When Kibana launches for the first time, it is not configured with any index pattern.
-
-#### Via the Kibana web UI
-
-**NOTE**: You need to inject data into Logstash before being able to configure a Logstash index pattern via the Kibana web
-UI. Then all you have to do is hit the *Create* button.
-
-Refer to [Connect Kibana with
-Elasticsearch](https://www.elastic.co/guide/en/kibana/current/connect-to-elasticsearch.html) for detailed instructions
-about the index pattern configuration.
-
-#### On the command line
-
-Run this command to create a Logstash index pattern:
-
-```console
-$ curl -XPUT -D- 'http://localhost:9200/.kibana/doc/index-pattern:docker-elk' \
-    -H 'Content-Type: application/json' \
-    -d '{"type": "index-pattern", "index-pattern": {"title": "logstash-*", "timeFieldName": "@timestamp"}}'
-```
-
-This will automatically be marked as the default index pattern as soon as the Kibana UI is opened for the first time.
