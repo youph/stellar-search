@@ -1,47 +1,44 @@
 package au.com.d2dcrc.ia.search.graph;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
- * Defines a single graph of implicit vertices and edges. This lightweight
- * representation is known as the <em>graph head</em>. <br>
- * Example JSON representation:
- * 
- * <pre>
- * {
-      "id": "342D5869102440778B69FDF03756C858",
-      "label": "iamagraph",
-      "properties": {
-          "key1" : "value1",
-          "key2" : 42,
-          "key3" : true
-      }
- }
- * </pre>
+ * Specifies a mutable EPG graph head element.
  */
-public interface EpgGraph extends EpgElement {
+public class EpgGraph extends EpgElement {
 
     /**
-     * Obtains the unique identifier of the graph.
-     * 
-     * @return The graph identifier.
+     * Constructs an empty EPG graph head.
      */
-    @Override
-    String getId();
+    public EpgGraph() {
+        super();
+    }
 
     /**
-     * Obtains the label of the graph.
+     * Constructs an EPG graph head.
      * 
-     * @return The graph label.
+     * @param id - The graph identifier.
+     * @param label - The graph label.
+     * @param properties - The graph properties.
      */
-    @Override
-    String getLabel();
+    @JsonCreator
+    public EpgGraph(
+        @JsonProperty("id") String id, 
+        @JsonProperty("label") String label, 
+        @JsonProperty("properties") EpgProperties properties
+    ) {
+        super(id, label, properties);
+    }
 
-    /**
-     * Obtains the properties of the graph. These should be treated as
-     * immutable.
-     * 
-     * @return The graph properties.
-     */
     @Override
-    EpgProperties getProperties();
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof EpgGraph) && super.equals(other);
+    }
 
 }

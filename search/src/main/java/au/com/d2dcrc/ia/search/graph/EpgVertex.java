@@ -1,56 +1,73 @@
 package au.com.d2dcrc.ia.search.graph;
 
-import java.util.Collection;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Defines a vertex (or node) in zero, one or more graphs. Example JSON
- * representation:
- * 
- * <pre>
- * {
-      "id": "342D5869102440778B69FDF03756C853",
-      "label": "Person",
-      "properties": {
-          "name" : "Slow Fred",
-          "IQ" : 42
-      },
-      "graphs": [ "342D5869102440778B69FDF03756C858" ]
- }
- * </pre>
+ * Specifies a mutable EPG vertex element.
  */
-public interface EpgVertex extends EpgElement {
+public class EpgVertex extends EpgElement {
+
+    @JsonProperty("graphs")
+    private Set<String> graphIds = new HashSet<>();
 
     /**
-     * Obtains the unique identifier of the vertex.
-     * 
-     * @return The vertex identifier.
+     * Constructs an empty EPG vertex.
      */
-    @Override
-    String getId();
+    public EpgVertex() {
+        super();
+    }
 
     /**
-     * Obtains the label of the vertex.
+     * Constructs an EPG vertex.
      * 
-     * @return The vertex label.
+     * @param id - The vertex identifier.
+     * @param label - The vertex label.
+     * @param properties - The vertex properties.
+     * @param graphs - The identifiers of the graphs to which the vertex belongs.
      */
-    @Override
-    String getLabel();
-
-    /**
-     * Obtains the properties of the vertex. These should be treated as
-     * immutable.
-     * 
-     * @return The vertex properties.
-     */
-    @Override
-    EpgProperties getProperties();
+    @JsonCreator
+    public EpgVertex(
+        @JsonProperty("id") String id, 
+        @JsonProperty("label") String label, 
+        @JsonProperty("properties") EpgProperties properties,
+        @JsonProperty("graphs") Set<String> graphs
+    ) {
+        super(id, label, properties);
+        setGraphIds(graphs);
+    }
 
     /**
      * Obtains the identifiers of the graphs of which the vertex is a member.
-     * These should be treated as immutable.
      * 
      * @return A (possibly empty) collection of graph identifiers.
      */
-    Collection<String> getGraphIds();
+    @JsonProperty("graphs")
+    public Set<String> getGraphIds() {
+        return graphIds;
+    }
+
+    /**
+     * Specifies the identifiers of the graphs of which the vertex is a member.
+     * 
+     * @param graphIds - A (possibly empty) set of graph identifiers.
+     */
+    public void setGraphIds(Set<String> graphIds) {
+        this.graphIds = (graphIds == null) ? new HashSet<>() : graphIds;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + graphIds.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return super.equals(other) 
+            && (other instanceof EpgVertex)
+            && graphIds.equals(((EpgVertex) other).getGraphIds());
+    }
 
 }

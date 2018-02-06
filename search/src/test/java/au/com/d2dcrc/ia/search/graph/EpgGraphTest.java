@@ -1,10 +1,9 @@
-package au.com.d2dcrc.ia.search.graph.impl;
+package au.com.d2dcrc.ia.search.graph;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import au.com.d2dcrc.ia.search.graph.EpgGraph;
+import static org.junit.Assert.assertTrue;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,18 +18,18 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @JsonTest
-public class EpgGraphImplTest {
+public class EpgGraphTest {
 
-    private final EpgGraphImpl fixture = new EpgGraphImpl(
+    private final EpgGraph fixture = new EpgGraph(
         "342D5869102440778B69FDF03756C858",
         "iamagraph",
-        new EpgPropertiesImpl("key1", "value1", "key2", 42, "key3", true)
+        new EpgProperties("key1", "value1", "key2", 42, "key3", true)
     );
 
     private final ClassPathResource jsonResource = new ClassPathResource("graph.json", getClass());
 
     @Inject
-    private JacksonTester<EpgGraphImpl> json;
+    private JacksonTester<EpgGraph> json;
 
     @Test
     public void testSerialize() throws Exception {
@@ -44,16 +43,25 @@ public class EpgGraphImplTest {
     }
 
     @Test
-    public void testSerializeDeserailize() throws Exception {
+    public void testSerializeDeserialize() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(fixture);
-        EpgGraph graph1 = mapper.reader().forType(EpgGraphImpl.class).readValue(json);
-        assertEquals(fixture, graph1);
-        SimpleModule mod = new SimpleModule();
-        mod.addDeserializer(EpgGraph.class, new EpgGraphImplDeserializer());
-        mapper.registerModule(mod);
-        EpgGraph graph2 = mapper.reader().forType(EpgGraph.class).readValue(json);
-        assertEquals(fixture, graph2);
+        EpgGraph graph = mapper.reader().forType(EpgGraph.class).readValue(json);
+        assertEquals(fixture, graph);
+    }
+
+    @Test
+    public void testMethods() throws Exception {
+        EpgGraph graph = new EpgGraph();
+        graph.setId("342D5869102440778B69FDF03756C858");
+        graph.setLabel("iamagraph");
+        graph.setProperties(new EpgProperties("key1", "value1", "key2", 42, "key3", true));
+        assertEquals(fixture, graph);
+        assertEquals(fixture.getId(), graph.getId());
+        assertEquals(fixture.getLabel(), graph.getLabel());
+        assertEquals(fixture.getProperties(), graph.getProperties());
+        assertEquals(fixture.hashCode(), graph.hashCode());
+        assertTrue(!graph.equals(null));
     }
 
 }

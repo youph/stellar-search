@@ -1,10 +1,9 @@
-package au.com.d2dcrc.ia.search.graph.impl;
+package au.com.d2dcrc.ia.search.graph;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import au.com.d2dcrc.ia.search.graph.EpgEdge;
+import static org.junit.Assert.assertTrue;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.util.Collections;
 import javax.inject.Inject;
 import org.junit.Test;
@@ -20,12 +19,12 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @JsonTest
-public class EpgEdgeImplTest {
+public class EpgEdgeTest {
 
-    private final EpgEdgeImpl fixture = new EpgEdgeImpl(
+    private final EpgEdge fixture = new EpgEdge(
         "342D5869102440778B69FDF03756C850",
         "isRelatedTo",
-        new EpgPropertiesImpl("relationship", "sibling"),
+        new EpgProperties("relationship", "sibling"),
         "342D5869102440778B69FDF03756C853",
         "342D5869102440778B69FDF03756C851",
         Collections.singleton("342D5869102440778B69FDF03756C858")
@@ -34,7 +33,7 @@ public class EpgEdgeImplTest {
     private final ClassPathResource jsonResource = new ClassPathResource("edge.json", getClass());
 
     @Inject
-    private JacksonTester<EpgEdgeImpl> json;
+    private JacksonTester<EpgEdge> json;
 
     @Test
     public void testSerialize() throws Exception {
@@ -48,16 +47,31 @@ public class EpgEdgeImplTest {
     }
 
     @Test
-    public void testSerializeDeserailize() throws Exception {
+    public void testSerializeDeserialize() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(fixture);
-        EpgEdge vertex1 = mapper.reader().forType(EpgEdgeImpl.class).readValue(json);
-        assertEquals(fixture, vertex1);
-        SimpleModule mod = new SimpleModule();
-        mod.addDeserializer(EpgEdge.class, new EpgEdgeImplDeserializer());
-        mapper.registerModule(mod);
-        EpgEdge vertex2 = mapper.reader().forType(EpgEdge.class).readValue(json);
-        assertEquals(fixture, vertex2);
+        EpgEdge edge = mapper.reader().forType(EpgEdge.class).readValue(json);
+        assertEquals(fixture, edge);
+    }
+
+    @Test
+    public void testMethods() throws Exception {
+        EpgEdge edge = new EpgEdge();
+        edge.setId("342D5869102440778B69FDF03756C850");
+        edge.setLabel("isRelatedTo");
+        edge.setProperties(new EpgProperties("relationship", "sibling"));
+        edge.setSourceId("342D5869102440778B69FDF03756C853");
+        edge.setTargetId("342D5869102440778B69FDF03756C851");
+        edge.setGraphIds(Collections.singleton("342D5869102440778B69FDF03756C858"));
+        assertEquals(fixture, edge);
+        assertEquals(fixture.getId(), edge.getId());
+        assertEquals(fixture.getLabel(), edge.getLabel());
+        assertEquals(fixture.getProperties(), edge.getProperties());
+        assertEquals(fixture.getSourceId(), edge.getSourceId());
+        assertEquals(fixture.getTargetId(), edge.getTargetId());
+        assertEquals(fixture.getGraphIds(), edge.getGraphIds());
+        assertEquals(fixture.hashCode(), edge.hashCode());
+        assertTrue(!edge.equals(null));
     }
 
 }

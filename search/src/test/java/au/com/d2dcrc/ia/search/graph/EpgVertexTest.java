@@ -1,10 +1,9 @@
-package au.com.d2dcrc.ia.search.graph.impl;
+package au.com.d2dcrc.ia.search.graph;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import au.com.d2dcrc.ia.search.graph.EpgVertex;
+import static org.junit.Assert.assertTrue;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.util.Collections;
 import javax.inject.Inject;
 import org.junit.Test;
@@ -20,19 +19,19 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @JsonTest
-public class EpgVertexImplTest {
+public class EpgVertexTest {
 
-    private final EpgVertexImpl fixture = new EpgVertexImpl(
+    private final EpgVertex fixture = new EpgVertex(
         "342D5869102440778B69FDF03756C853",
         "iamanode",
-        new EpgPropertiesImpl("name", "Slow Fred", "IQ", 42),
+        new EpgProperties("name", "Slow Fred", "IQ", 42),
         Collections.singleton("342D5869102440778B69FDF03756C858")
     );
 
     private final ClassPathResource jsonResource = new ClassPathResource("vertex.json", getClass());
 
     @Inject
-    private JacksonTester<EpgVertexImpl> json;
+    private JacksonTester<EpgVertex> json;
 
     @Test
     public void testSerialize() throws Exception {
@@ -46,16 +45,27 @@ public class EpgVertexImplTest {
     }
 
     @Test
-    public void testSerializeDeserailize() throws Exception {
+    public void testSerializeDeserialize() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(fixture);
-        EpgVertex vertex1 = mapper.reader().forType(EpgVertexImpl.class).readValue(json);
-        assertEquals(fixture, vertex1);
-        SimpleModule mod = new SimpleModule();
-        mod.addDeserializer(EpgVertex.class, new EpgVertexImplDeserializer());
-        mapper.registerModule(mod);
-        EpgVertex vertex2 = mapper.reader().forType(EpgVertex.class).readValue(json);
-        assertEquals(fixture, vertex2);
+        EpgVertex vertex = mapper.reader().forType(EpgVertex.class).readValue(json);
+        assertEquals(fixture, vertex);
+    }
+
+    @Test
+    public void testMethods() throws Exception {
+        EpgVertex vertex = new EpgVertex();
+        vertex.setId("342D5869102440778B69FDF03756C853");
+        vertex.setLabel("iamanode");
+        vertex.setProperties(new EpgProperties("name", "Slow Fred", "IQ", 42));
+        vertex.setGraphIds(Collections.singleton("342D5869102440778B69FDF03756C858"));
+        assertEquals(fixture, vertex);
+        assertEquals(fixture.getId(), vertex.getId());
+        assertEquals(fixture.getLabel(), vertex.getLabel());
+        assertEquals(fixture.getProperties(), vertex.getProperties());
+        assertEquals(fixture.getGraphIds(), vertex.getGraphIds());
+        assertEquals(fixture.hashCode(), vertex.hashCode());
+        assertTrue(!vertex.equals(null));
     }
 
 }
