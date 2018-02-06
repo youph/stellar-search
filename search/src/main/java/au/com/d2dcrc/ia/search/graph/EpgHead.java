@@ -4,26 +4,26 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Specifies a mutable EPG graph head element.
+ * Specifies a mutable EPG head element.
  */
-public class EpgGraph extends EpgElement {
+public class EpgHead extends EpgElement {
 
     /**
-     * Constructs an empty EPG graph head.
+     * Constructs an empty EPG head.
      */
-    public EpgGraph() {
+    public EpgHead() {
         super();
     }
 
     /**
-     * Constructs an EPG graph head.
+     * Constructs an EPG head.
      * 
      * @param id - The graph identifier.
      * @param label - The graph label.
      * @param properties - The graph properties.
      */
     @JsonCreator
-    public EpgGraph(
+    public EpgHead(
         @JsonProperty("id") String id, 
         @JsonProperty("label") String label, 
         @JsonProperty("properties") EpgProperties properties
@@ -38,7 +38,7 @@ public class EpgGraph extends EpgElement {
 
     @Override
     public boolean equals(Object other) {
-        return (other instanceof EpgGraph) && super.equals(other);
+        return (other instanceof EpgHead) && super.equals(other);
     }
 
 }
