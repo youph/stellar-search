@@ -9,21 +9,14 @@ import au.com.d2dcrc.ia.search.graph.EpgProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URL;
-import javax.inject.Inject;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Tests the JSON construction of {@link EpgVertexModel}.
  */
-@RunWith(SpringRunner.class)
-@JsonTest
 public class EpgVertexModelTest {
 
-    @Inject
-    private ObjectMapper mapper;
+    private ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Tests against the IMBD vertex data.

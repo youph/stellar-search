@@ -1,4 +1,4 @@
-package au.com.d2dcrc.ia.search.ingestor;
+package au.com.d2dcrc.ia.search.ingestor.error;
 
 /**
  * Indicates that an EPG element with the given identifier does not exist but is
@@ -7,7 +7,7 @@ package au.com.d2dcrc.ia.search.ingestor;
 @SuppressWarnings("serial")
 public class EpgElementMissingException extends EpgSemanticsException {
 
-    /*package-private*/ EpgElementMissingException(String message) {
+    public EpgElementMissingException(String message) {
         super(message);
     }
 

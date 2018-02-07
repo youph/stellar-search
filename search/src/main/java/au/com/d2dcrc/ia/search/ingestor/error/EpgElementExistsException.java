@@ -1,4 +1,4 @@
-package au.com.d2dcrc.ia.search.ingestor;
+package au.com.d2dcrc.ia.search.ingestor.error;
 
 /**
  * Indicates that an EPG element with the same identifier already exists.
@@ -6,7 +6,7 @@ package au.com.d2dcrc.ia.search.ingestor;
 @SuppressWarnings("serial")
 public class EpgElementExistsException extends EpgSemanticsException {
 
-    /*package-private*/ EpgElementExistsException(String message) {
+    public EpgElementExistsException(String message) {
         super(message);
     }
 

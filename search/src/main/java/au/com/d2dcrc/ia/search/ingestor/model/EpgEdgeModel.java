@@ -1,5 +1,6 @@
 package au.com.d2dcrc.ia.search.ingestor.model;
 
+import au.com.d2dcrc.ia.search.ingestor.error.EpgMissingFieldException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -105,4 +106,29 @@ public class EpgEdgeModel {
     public EpgEdgeMetaDataModel getMetaData() {
         return metaData;
     }
+
+    /**
+     * Validates that all required edge fields are present.
+     * 
+     * @throws EpgMissingFieldException if an edge field is missing.
+     */
+    public void validate() throws EpgMissingFieldException {
+        if (this.getId() == null) {
+            throw new EpgMissingFieldException("Missing EPG edge identifier");
+        }
+        if (this.getSourceId() == null) {
+            throw new EpgMissingFieldException("Missing EPG edge source identifier");
+        }
+        if (this.getTargetId() == null) {
+            throw new EpgMissingFieldException("Missing EPG edge target identifier");
+        }
+        if (this.getData() == null) {
+            throw new EpgMissingFieldException("Missing EPG edge data");
+        }
+        if (this.getMetaData() == null) {
+            throw new EpgMissingFieldException("Missing EPG edge meta-data");
+        }
+        this.getMetaData().validate();
+    }
+
 }

@@ -1,25 +1,22 @@
-package au.com.d2dcrc.ia.search.ingestor;
+package au.com.d2dcrc.ia.search.ingestor.extractor;
 
 import au.com.d2dcrc.ia.search.graph.EpgEdge;
 import au.com.d2dcrc.ia.search.graph.EpgProperties;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgSyntaxException;
 import au.com.d2dcrc.ia.search.ingestor.model.EpgEdgeModel;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
- * Allows the repeated extraction of EPG edges from textual JSON
- * representations.
+ * Allows the repeated extraction of EPG edges from JSON strings in
+ * {@link EpgEdgeModel} format.
  */
-public class EpgEdgeExtractor implements EpgElementExtractor<EpgEdge> {
+public class EpgEdgeExtractor extends EpgElementExtractor<EpgEdge> {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-    
     @Override
     public EpgEdge extract(String json) throws EpgSyntaxException {
         try {
             EpgEdgeModel model = mapper.readValue(json, EpgEdgeModel.class);
+            model.validate();
             return new EpgEdge(
                 model.getId(),
                 model.getMetaData().getLabel(),
@@ -29,16 +26,8 @@ public class EpgEdgeExtractor implements EpgElementExtractor<EpgEdge> {
                 asSet(model.getMetaData().getGraphIds())
             );
         } catch (IOException e) {
-            throw new EpgDataException(e.getMessage());
+            throw new EpgSyntaxException(e.getMessage());
         }
-    }
-
-    private Set<String> asSet(String[] idArray) {
-        Set<String> idSet = new HashSet<>();
-        for (String id : idArray) {
-            idSet.add(id);
-        }
-        return idSet;
     }
 
 }

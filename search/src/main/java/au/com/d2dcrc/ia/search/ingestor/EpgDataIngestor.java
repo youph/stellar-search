@@ -3,6 +3,12 @@ package au.com.d2dcrc.ia.search.ingestor;
 import au.com.d2dcrc.ia.search.graph.EpgEdge;
 import au.com.d2dcrc.ia.search.graph.EpgHead;
 import au.com.d2dcrc.ia.search.graph.EpgVertex;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgDataException;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgElementMissingException;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgIngestionException;
+import au.com.d2dcrc.ia.search.ingestor.extractor.EpgEdgeExtractor;
+import au.com.d2dcrc.ia.search.ingestor.extractor.EpgHeadExtractor;
+import au.com.d2dcrc.ia.search.ingestor.extractor.EpgVertexExtractor;
 import au.com.d2dcrc.ia.search.management.EpgReferenceModel;
 import java.io.File;
 import java.net.URI;
@@ -13,9 +19,9 @@ import java.nio.file.Path;
  */
 public class EpgDataIngestor {
 
-    private final QueryableEpgElementStore<EpgHead> graphSet;
-    private final QueryableEpgElementStore<EpgVertex> vertexSet;
-    private final QueryableEpgElementStore<EpgEdge> edgeSet;
+    private final EpgElementContainer<EpgHead> graphSet;
+    private final EpgElementContainer<EpgVertex> vertexSet;
+    private final EpgElementContainer<EpgEdge> edgeSet;
 
     /**
      * Constructs an EPG graph ingestor linked to the specified EPG element storage sets.
@@ -25,9 +31,9 @@ public class EpgDataIngestor {
      * @param edgeSet - The holder for a set of graph edges.
      */
     public EpgDataIngestor(
-            final QueryableEpgElementStore<EpgHead> graphSet,
-            final QueryableEpgElementStore<EpgVertex> vertexSet,
-            final QueryableEpgElementStore<EpgEdge> edgeSet
+            final EpgElementContainer<EpgHead> graphSet,
+            final EpgElementContainer<EpgVertex> vertexSet,
+            final EpgElementContainer<EpgEdge> edgeSet
     ) {
         this.graphSet = graphSet;
         this.vertexSet = vertexSet;
@@ -49,8 +55,7 @@ public class EpgDataIngestor {
     }
 
     private void ingestGraphHeads(URI graphData) {
-        String scheme = graphData.getScheme();
-        if ("file".equals(scheme)) {
+        if (graphData != null && "file".equals(graphData.getScheme())) {
             new EpgElementFileIngestor<EpgHead>(graphSet, new EpgHeadExtractor()).ingest(getFilePath(graphData));
         } else {
             throw new EpgDataException("Unhandled scheme for URI: " + graphData);
@@ -66,8 +71,7 @@ public class EpgDataIngestor {
     }
 
     private void ingestVertices(URI vertexData) {
-        String scheme = vertexData.getScheme();
-        if ("file".equals(scheme)) {
+        if (vertexData != null && "file".equals(vertexData.getScheme())) {
             new EpgElementFileIngestor<EpgVertex>(this::validateVertex, new EpgVertexExtractor())
                 .ingest(getFilePath(vertexData));
         } else {
@@ -87,8 +91,7 @@ public class EpgDataIngestor {
     }
 
     private void ingestEdges(URI edgeData) {
-        String scheme = edgeData.getScheme();
-        if ("file".equals(scheme)) {
+        if (edgeData != null && "file".equals(edgeData.getScheme())) {
             new EpgElementFileIngestor<EpgEdge>(this::validateEdge, new EpgEdgeExtractor())
                 .ingest(getFilePath(edgeData));
         } else {

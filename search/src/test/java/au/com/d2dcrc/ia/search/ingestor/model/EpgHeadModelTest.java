@@ -6,21 +6,14 @@ import static org.junit.Assert.assertTrue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URL;
-import javax.inject.Inject;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Tests the JSON construction of {@link EpgHeadModel}.
  */
-@RunWith(SpringRunner.class)
-@JsonTest
 public class EpgHeadModelTest {
 
-    @Inject
-    private ObjectMapper mapper;
+    private ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Tests against the IMBD head data.
@@ -34,10 +27,9 @@ public class EpgHeadModelTest {
         EpgHeadModel model = mapper.readValue(jsonResource, EpgHeadModel.class);
 
         assertNotNull(model);
+        model.validate();
         assertEquals("342D5869102440778B69FDF03756C858", model.getId());
-        assertNotNull(model.getData());
         assertTrue(model.getData().isEmpty());
-        assertNotNull(model.getMetaData());
         assertEquals("imdb", model.getMetaData().getLabel());
     }
 
@@ -53,10 +45,9 @@ public class EpgHeadModelTest {
         EpgHeadModel model = mapper.readValue(jsonResource, EpgHeadModel.class);
 
         assertNotNull(model);
+        model.validate();
         assertEquals("59ace22b1f9e746b6e5fe2bd", model.getId());
-        assertNotNull(model.getData());
         assertTrue(model.getData().isEmpty());
-        assertNotNull(model.getMetaData());
         assertEquals("small_yelp_example", model.getMetaData().getLabel());
     }
 

@@ -1,11 +1,14 @@
 package au.com.d2dcrc.ia.search.ingestor;
 
 import au.com.d2dcrc.ia.search.graph.EpgElement;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgDataException;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgSyntaxException;
+import au.com.d2dcrc.ia.search.ingestor.extractor.EpgElementExtractor;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 /**
  * Loads EPG element data from one or more files. Each file contains zero, one
@@ -44,13 +47,13 @@ public class EpgElementFileIngestor<T extends EpgElement> {
         } else if (Files.isRegularFile(path)) {
             ingestElementFromFile(path);
         } else {
-            throw new EpgDataException("Invalid file path: " + path);
+            throw new EpgDataException("Invalid ingestion path: " + path);
         }
     }
 
     private void ingestElementFromDirectory(Path path) {
-        try {
-            Files.walk(path, FileVisitOption.FOLLOW_LINKS).forEach(this::ingestElementFromFile);
+        try (Stream<Path> files = Files.walk(path).filter(p -> Files.isRegularFile(p))) {
+            files.forEach(this::ingestElementFromFile);
         } catch (IOException e) {
             throw new EpgDataException("Error reading from directory path: " + path);
         }

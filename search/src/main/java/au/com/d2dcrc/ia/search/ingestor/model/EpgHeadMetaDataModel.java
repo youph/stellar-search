@@ -1,5 +1,6 @@
 package au.com.d2dcrc.ia.search.ingestor.model;
 
+import au.com.d2dcrc.ia.search.ingestor.error.EpgMissingFieldException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
@@ -34,6 +35,17 @@ public class EpgHeadMetaDataModel {
      */
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * Validates that all required head meta-data fields are present.
+     * 
+     * @throws EpgMissingFieldException if a head meta-data field is missing.
+     */
+    public void validate() throws EpgMissingFieldException {
+        if (this.getLabel() == null) {
+            throw new EpgMissingFieldException("Missing EPG head meta-data label");
+        }
     }
 
 }
