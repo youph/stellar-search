@@ -1,4 +1,4 @@
-package au.com.d2dcrc.ia.search.ingestor;
+package au.com.d2dcrc.ia.search.ingestor.error;
 
 /**
  * Indicates that an EPG element could not be ingested from a data source, for
@@ -7,7 +7,7 @@ package au.com.d2dcrc.ia.search.ingestor;
 @SuppressWarnings("serial")
 public class EpgIngestionException extends RuntimeException {
 
-    /*package-private*/ EpgIngestionException(String message) {
+    public EpgIngestionException(String message) {
         super(message);
     }
 

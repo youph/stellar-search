@@ -1,25 +1,16 @@
 package au.com.d2dcrc.ia.search.graph;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigInteger;
-import javax.inject.Inject;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Tests that the {@link EpgProperties} object is correctly serialised into JSON
  * and deserialised from JSON.
  */
-@RunWith(SpringRunner.class)
-@JsonTest
 public class EpgPropertiesTest {
 
     private final EpgProperties fixture = new EpgProperties(
@@ -32,27 +23,11 @@ public class EpgPropertiesTest {
         "biginteger", new BigInteger("92233720368547758070")
     );
 
-    private final ClassPathResource jsonResource = new ClassPathResource("properties.json", getClass());
-
-    @Inject
-    private JacksonTester<EpgProperties> json;
-
-    @Test
-    public void testSerialize() throws Exception {
-        assertThat(this.json.write(this.fixture)).isEqualToJson(this.jsonResource.getPath());
-    }
-
-    @Test
-    public void testDeserialize() throws Exception {
-        assertThat(this.json.read(this.jsonResource)).isEqualTo(this.fixture);
-        assertThat(this.json.readObject(this.jsonResource)).isEqualTo(this.fixture);
-    }
-
     @Test
     public void testSerializeDeserialize() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(fixture);
-        EpgProperties properties = mapper.reader().forType(EpgProperties.class).readValue(json);
+        EpgProperties properties = mapper.readValue(json, EpgProperties.class);
         assertEquals(fixture, properties);
     }
 

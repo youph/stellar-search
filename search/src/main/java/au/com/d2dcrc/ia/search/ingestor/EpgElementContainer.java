@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
  * Provides a queryable holder for a set of EPG elements of common type. Each
  * EPG element must have a unique identifier.
  */
-public interface QueryableEpgElementStore<T extends EpgElement> extends EpgElementStore<T>, Iterable<T> {
+public interface EpgElementContainer<T extends EpgElement> extends EpgElementStore<T>, Iterable<T> {
 
     /**
      * Indicates whether or not an element has been added to the set.

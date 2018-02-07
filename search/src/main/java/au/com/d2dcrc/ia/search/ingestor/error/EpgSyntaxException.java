@@ -1,4 +1,4 @@
-package au.com.d2dcrc.ia.search.ingestor;
+package au.com.d2dcrc.ia.search.ingestor.error;
 
 /**
  * Indicates that an EPG element data file does not conform to the agreed
@@ -7,7 +7,7 @@ package au.com.d2dcrc.ia.search.ingestor;
 @SuppressWarnings("serial")
 public class EpgSyntaxException extends EpgIngestionException {
 
-    /*package-private*/ EpgSyntaxException(String message) {
+    public EpgSyntaxException(String message) {
         super(message);
     }
 

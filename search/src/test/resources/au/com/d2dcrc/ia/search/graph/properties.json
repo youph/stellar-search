@@ -1,9 +1,0 @@
-{
-    "string" : "value1",
-    "int" : 42,
-    "boolean" : true,
-    "double" : 315.0,
-    "long" : 2147483700,
-    "int-as-long" : 13,
-    "biginteger" : 92233720368547758070
-}

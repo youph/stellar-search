@@ -1,6 +1,7 @@
 package au.com.d2dcrc.ia.search.ingestor;
 
 import au.com.d2dcrc.ia.search.graph.EpgElement;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgElementExistsException;
 
 /**
  * Allows EPG elements of the specified type to be stored.

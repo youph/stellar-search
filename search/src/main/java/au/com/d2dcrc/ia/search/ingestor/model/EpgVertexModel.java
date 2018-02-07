@@ -1,5 +1,6 @@
 package au.com.d2dcrc.ia.search.ingestor.model;
 
+import au.com.d2dcrc.ia.search.ingestor.error.EpgMissingFieldException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -74,4 +75,23 @@ public class EpgVertexModel {
     public EpgVertexMetaDataModel getMetaData() {
         return metaData;
     }
+
+    /**
+     * Validates that all required vertex fields are present.
+     * 
+     * @throws EpgMissingFieldException if a vertex field is missing.
+     */
+    public void validate() throws EpgMissingFieldException {
+        if (this.getId() == null) {
+            throw new EpgMissingFieldException("Missing EPG vertex identifier");
+        }
+        if (this.getData() == null) {
+            throw new EpgMissingFieldException("Missing EPG vertex data");
+        }
+        if (this.getMetaData() == null) {
+            throw new EpgMissingFieldException("Missing EPG vertex meta-data");
+        }
+        this.getMetaData().validate();
+    }
+
 }

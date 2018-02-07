@@ -1,4 +1,4 @@
-package au.com.d2dcrc.ia.search.ingestor;
+package au.com.d2dcrc.ia.search.ingestor.error;
 
 /**
  * Indicates either that an EPG element data file or data path could not be
@@ -7,7 +7,7 @@ package au.com.d2dcrc.ia.search.ingestor;
 @SuppressWarnings("serial")
 public class EpgDataException extends EpgIngestionException {
 
-    /*package-private*/ EpgDataException(String message) {
+    public EpgDataException(String message) {
         super(message);
     }
 
