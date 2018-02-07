@@ -1,0 +1,73 @@
+{
+  "imdb" : {
+    "mappings" : {
+      "doc" : {
+        "properties" : {
+          "graphs" : {
+            "type" : "keyword"
+          },
+          "in" : {
+            "type" : "nested",
+            "properties" : {
+              "label" : {
+                "type" : "keyword"
+              },
+              "node" : {
+                "properties" : {
+                  "graphs" : {
+                    "type" : "keyword"
+                  },
+                  "id" : {
+                    "type" : "keyword"
+                  },
+                  "label" : {
+                    "type" : "keyword"
+                  },
+                  "properties" : {
+                    "type" : "object"
+                  }
+                }
+              },
+              "properties" : {
+                "type" : "object"
+              }
+            }
+          },
+          "label" : {
+            "type" : "keyword"
+          },
+          "out" : {
+            "type" : "nested",
+            "properties" : {
+              "label" : {
+                "type" : "keyword"
+              },
+              "node" : {
+                "properties" : {
+                  "graphs" : {
+                    "type" : "keyword"
+                  },
+                  "id" : {
+                    "type" : "keyword"
+                  },
+                  "label" : {
+                    "type" : "keyword"
+                  },
+                  "properties" : {
+                    "type" : "object"
+                  }
+                }
+              },
+              "properties" : {
+                "type" : "object"
+              }
+            }
+          },
+          "properties" : {
+            "type" : "object"
+          }
+        }
+      }
+    }
+  }
+}

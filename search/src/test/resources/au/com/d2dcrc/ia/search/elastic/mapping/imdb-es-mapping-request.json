@@ -1,0 +1,71 @@
+{
+  "mappings" : {
+    "doc" : {
+      "properties" : {
+        "label" : {
+          "type" : "keyword"
+        },
+        "graphs" : {
+          "type" : "keyword"
+        },
+        "properties" : {
+          "properties" : { }
+        },
+        "in" : {
+          "type" : "nested",
+          "properties" : {
+            "label" : {
+              "type" : "keyword"
+            },
+            "properties" : {
+              "properties" : { }
+            },
+            "node" : {
+              "properties" : {
+                "id" : {
+                  "type" : "keyword"
+                },
+                "label" : {
+                  "type" : "keyword"
+                },
+                "graphs" : {
+                  "type" : "keyword"
+                },
+                "properties" : {
+                  "properties" : { }
+                }
+              }
+            }
+          }
+        },
+        "out" : {
+          "type" : "nested",
+          "properties" : {
+            "label" : {
+              "type" : "keyword"
+            },
+            "properties" : {
+              "properties" : { }
+            },
+            "node" : {
+              "properties" : {
+                "id" : {
+                  "type" : "keyword"
+                },
+                "label" : {
+                  "type" : "keyword"
+                },
+                "graphs" : {
+                  "type" : "keyword"
+                },
+                "properties" : {
+                  "properties" : { }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

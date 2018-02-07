@@ -1,0 +1,184 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A json schema representation of a mapping used to create an Elasticsearch (6.x) index.",
+  "required": [
+    "mappings"
+  ],
+  "properties": {
+    "mappings": {
+      "type": "object",
+      "required": [
+        "doc"
+      ],
+      "properties": {
+        "doc": {
+          "type": "object",
+          "required": [
+            "properties"
+          ],
+          "properties": {
+            "properties": {
+              "type": "object",
+              "required": [
+                "label",
+                "graphs",
+                "properties",
+                "in",
+                "out"
+              ],
+              "properties": {
+                "label": {
+                  "type": "object",
+                  "$ref": "#/definitions/label"
+                },
+                "graphs": {
+                  "type": "object",
+                  "$ref": "#/definitions/graphs"
+                },
+                "properties": {
+                  "type": "object",
+                  "$ref": "#/definitions/properties"
+                },
+                "in": {
+                  "type": "object",
+                  "description": "The in relation of the root node",
+                  "required" : [ "type" ],
+                  "properties": {
+                    "type": {
+                      "enum": [ "nested" ]
+                    },
+                    "properties": {
+                      "type": "object",
+                      "required" : [ "label", "properties", "node" ],
+                      "properties": {
+                        "label": {
+                          "type": "object",
+                          "$ref": "#/definitions/label"
+                        },
+                        "properties": {
+                          "type": "object",
+                          "$ref": "#/definitions/properties"
+                        },
+                        "node": {
+                          "type": "object",
+                          "description": "The node connected via the in relation",
+                          "$ref": "#/definitions/node"
+                        }
+                      }
+                    }
+                  }
+                },
+                "out": {
+                  "type": "object",
+                  "description": "The out relation of the root node",
+                  "required" : [ "type" ],
+                  "properties": {
+                    "type": {
+                      "enum": [ "nested" ]
+                    },
+                    "properties": {
+                      "type": "object",
+                      "required" : [ "label", "properties", "node" ],
+                      "properties": {
+                        "label": {
+                          "type": "object",
+                          "$ref": "#/definitions/label"
+                        },
+                        "properties": {
+                          "type": "object",
+                          "$ref": "#/definitions/properties"
+                        },
+                        "node": {
+                          "type": "object",
+                          "description": "The node connected via the out relation",
+                          "$ref": "#/definitions/node"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+
+    "label": {
+      "description": "The label of a node",
+      "properties": {
+        "type": {
+          "enum": [ "keyword" ]
+        }
+      }
+    },
+
+    "graphs": {
+      "type": "object",
+      "description": "The graphs that a node belongs to",
+      "properties": {
+        "type": {
+          "enum": [ "keyword" ]
+        }
+      }
+    },
+
+    "id": {
+      "type": "object",
+      "description": "The id of a node",
+      "properties": {
+        "type": {
+          "enum": [ "keyword" ]
+        }
+      }
+    },
+
+    "properties": {
+      "type": "object",
+      "description": "The properties of a node",
+      "properties": {
+        "properties": {
+          "type": "object"
+        }
+      }
+    },
+
+    "node": {
+      "type": "object",
+      "description": "A related node",
+      "properties": {
+        "properties": {
+          "type": "object",
+          "required": [
+            "id",
+            "label",
+            "graphs",
+            "properties"
+          ],
+          "properties": {
+            "id": {
+              "type": "object",
+              "$ref": "#/definitions/id"
+            },
+            "label": {
+              "type": "object",
+              "$ref": "#/definitions/label"
+            },
+            "graphs": {
+              "type": "object",
+              "$ref": "#/definitions/graphs"
+            },
+            "properties": {
+              "type": "object",
+              "$ref": "#/definitions/properties"
+            }
+          }
+        }
+      }
+    }
+
+  }
+}

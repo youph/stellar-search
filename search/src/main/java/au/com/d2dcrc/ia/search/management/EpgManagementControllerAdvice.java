@@ -4,6 +4,7 @@ import au.com.d2dcrc.ia.search.response.BaseControllerAdvice;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import org.elasticsearch.ElasticsearchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,6 +25,12 @@ public class EpgManagementControllerAdvice extends BaseControllerAdvice {
     @ResponseBody
     ResponseEntity<?> handleException(HttpServletRequest request, Throwable ex) {
         return errorResponse(request, ex);
+    }
+
+    @ExceptionHandler(ElasticsearchException.class)
+    @ResponseBody
+    ResponseEntity<?> handleElasticsearchException(HttpServletRequest request, Throwable ex) {
+        return errorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, ex);
     }
 
 }

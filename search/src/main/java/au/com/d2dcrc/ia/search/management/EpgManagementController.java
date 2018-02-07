@@ -105,7 +105,12 @@ public class EpgManagementController {
             code = org.apache.http.HttpStatus.SC_BAD_REQUEST, 
             message = "Bad Request", 
             response = ErrorView.class
-        ) 
+        ),
+        @ApiResponse(
+            code = org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR,
+            message = "Internal Server Error",
+            response = ErrorView.class
+        )
     })
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/{name}", method = RequestMethod.POST)

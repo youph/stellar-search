@@ -1,13 +1,10 @@
 package au.com.d2dcrc.ia.search.management;
 
-import org.springframework.validation.annotation.Validated;
-
-
-import java.net.URI;
-
-import javax.validation.constraints.NotNull;
-
 import io.swagger.annotations.ApiModelProperty;
+import java.net.URI;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 
 @Validated
 public class EpgReferenceModel {
@@ -21,6 +18,9 @@ public class EpgReferenceModel {
     @ApiModelProperty(value = "A URI to edges", required = true, example = "file:/foo/edges.json")
     @NotNull
     private final URI edges;
+    @ApiModelProperty(value = "An optional schema describing the EPG")
+    @Valid
+    private final EpgSchema epgSchema;
 
     /**
      * An EPG Reference Model encapsulating URI references to resources describing an EPG.
@@ -28,15 +28,18 @@ public class EpgReferenceModel {
      * @param graphs the URI to the graphs of the EPG
      * @param vertices the URI to the vertices of the EPG
      * @param edges the URI to the edges of the EPG
+     * @param epgSchema the graph schema of the EPG
      */
     public EpgReferenceModel(
         final URI graphs,
         final URI vertices,
-        final URI edges
+        final URI edges,
+        final EpgSchema epgSchema
     ) {
         this.graphs = graphs;
         this.vertices = vertices;
         this.edges = edges;
+        this.epgSchema = epgSchema;
     }
 
     public URI getGraphs() {
@@ -49,6 +52,10 @@ public class EpgReferenceModel {
 
     public URI getEdges() {
         return edges;
+    }
+
+    public EpgSchema getEpgSchema() {
+        return epgSchema;
     }
 
     @Override

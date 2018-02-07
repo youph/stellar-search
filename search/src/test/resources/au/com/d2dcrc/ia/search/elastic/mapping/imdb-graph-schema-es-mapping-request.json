@@ -1,0 +1,119 @@
+{
+  "mappings" : {
+    "doc" : {
+      "properties" : {
+        "label" : {
+          "type" : "keyword"
+        },
+        "graphs" : {
+          "type" : "keyword"
+        },
+        "properties" : {
+          "properties" : {
+            "name" : {
+              "type" : "text"
+            },
+            "title" : {
+              "type" : "text"
+            },
+            "classification" : {
+              "type" : "text"
+            },
+            "year" : {
+              "type" : "text"
+            },
+            "isforeign" : {
+              "type" : "boolean"
+            }
+          }
+        },
+        "in" : {
+          "type" : "nested",
+          "properties" : {
+            "label" : {
+              "type" : "keyword"
+            },
+            "properties" : {
+              "properties" : { }
+            },
+            "node" : {
+              "properties" : {
+                "id" : {
+                  "type" : "keyword"
+                },
+                "label" : {
+                  "type" : "keyword"
+                },
+                "graphs" : {
+                  "type" : "keyword"
+                },
+                "properties" : {
+                  "properties" : {
+                    "name" : {
+                      "type" : "text"
+                    },
+                    "title" : {
+                      "type" : "text"
+                    },
+                    "classification" : {
+                      "type" : "text"
+                    },
+                    "year" : {
+                      "type" : "text"
+                    },
+                    "isforeign" : {
+                      "type" : "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "out" : {
+          "type" : "nested",
+          "properties" : {
+            "label" : {
+              "type" : "keyword"
+            },
+            "properties" : {
+              "properties" : { }
+            },
+            "node" : {
+              "properties" : {
+                "id" : {
+                  "type" : "keyword"
+                },
+                "label" : {
+                  "type" : "keyword"
+                },
+                "graphs" : {
+                  "type" : "keyword"
+                },
+                "properties" : {
+                  "properties" : {
+                    "name" : {
+                      "type" : "text"
+                    },
+                    "title" : {
+                      "type" : "text"
+                    },
+                    "classification" : {
+                      "type" : "text"
+                    },
+                    "year" : {
+                      "type" : "text"
+                    },
+                    "isforeign" : {
+                      "type" : "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
