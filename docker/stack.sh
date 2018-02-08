@@ -3,21 +3,22 @@
 usage() {
   cat - >&2 <<EOF
 NAME
-    stellar-stack.sh
+    stack.sh
 
 DESCRIPTION
-    Bring the stellar stack up or down. Simple wrapper around docker-compose which by
-    default only launches all services but the search service (i.e. only dependant
-    services) to ease development.
+    Bring the stellar stack up or down. Simple wrapper around docker-compose which
+    provides a default project name (stellar-search) and only launches the dependant
+    services need by the search spring app needed for development. To bring
+    up the spring app in a docker container in addition to the dependant service, you
+    can specify with the `--all` option.
 
 SYNOPSIS
-    stellar-stack.sh [-h|--help]
-    stellar-stack.sh [-v|--verbose]
-                     [-a|--all]
-                     [-f|--foreground]
-                     [-p|--project-name <name>]
-                     [--]
-                     <COMMAND> [ARGS]
+    stack.sh [-h|--help]
+    stack.sh [-v|--verbose]
+             [-a|--all]
+             [-p|--project-name <name>]
+             [--]
+             <COMMAND> [ARGS...]
 
 ARGUMENTS
   COMMAND

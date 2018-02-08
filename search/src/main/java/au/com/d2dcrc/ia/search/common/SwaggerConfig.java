@@ -1,14 +1,19 @@
 package au.com.d2dcrc.ia.search.common;
 
+import com.fasterxml.classmate.TypeResolver;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.AlternateTypeRule;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.StringVendorExtension;
@@ -42,6 +47,12 @@ public class SwaggerConfig {
             Collections.singleton(new StringVendorExtension("D2DCRC", "D2DCRC"))
         );
 
+        final TypeResolver typeResolver = new TypeResolver();
+        final AlternateTypeRule collectionRule = AlternateTypeRules.newRule(
+            typeResolver.resolve(List.class, URI.class), // replace List<URI>
+            typeResolver.resolve(List.class, String.class) // with List<String>
+        );
+
         return new Docket(DocumentationType.SWAGGER_2)
             .select()
             .apis(RequestHandlerSelectors.basePackage("au.com.d2dcrc.ia.search"))
@@ -51,7 +62,9 @@ public class SwaggerConfig {
             .produces(Collections.singleton(MediaType.APPLICATION_JSON_VALUE))
             .consumes(Collections.singleton(MediaType.APPLICATION_JSON_VALUE))
             .directModelSubstitute(URI.class, String.class)
+            .alternateTypeRules(collectionRule)
             .apiInfo(apiInfo);
+
     }
 
 }

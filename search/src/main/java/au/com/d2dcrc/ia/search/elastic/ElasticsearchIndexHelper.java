@@ -2,13 +2,10 @@ package au.com.d2dcrc.ia.search.elastic;
 
 import au.com.d2dcrc.ia.search.elastic.mapping.ElasticsearchMappingBuilder;
 import au.com.d2dcrc.ia.search.management.EpgSchema;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import javax.inject.Inject;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.nio.entity.NStringEntity;
@@ -22,6 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+
+import javax.inject.Inject;
 
 /**
  * Helper for working with elasticsearch indices.
@@ -84,7 +88,7 @@ public class ElasticsearchIndexHelper {
 
         try {
             DeleteIndexResponse response = restHighLevelClient
-                .indices().deleteIndex(request);
+                .indices().delete(request);
 
             if (response.isAcknowledged()) {
                 logger.debug("Deleting elastic index: " + indexName);

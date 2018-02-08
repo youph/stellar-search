@@ -1,16 +1,19 @@
 package au.com.d2dcrc.ia.search.management;
 
-import io.swagger.annotations.ApiModelProperty;
+import org.springframework.validation.annotation.Validated;
+
 import java.net.URI;
 import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import org.springframework.validation.annotation.Validated;
+
+import io.swagger.annotations.ApiModelProperty;
 
 @Validated
 public class EpgSchema {
 
-    @ApiModelProperty
+    @ApiModelProperty(value = "List of URIs to sources", required = true)
     @NotNull
     private final List<URI> sources;
 
