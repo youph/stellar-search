@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>au.com.d2dcrc.ia</groupId>
-        <artifactId>ia-parent</artifactId>
+        <groupId>au.csiro.data61.stellar</groupId>
+        <artifactId>stellar-search-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>ia-core</artifactId>
+    <artifactId>stellar-search-core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>

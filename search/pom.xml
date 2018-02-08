@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>au.com.d2dcrc.ia</groupId>
-        <artifactId>ia-parent</artifactId>
+        <groupId>au.csiro.data61.stellar</groupId>
+        <artifactId>stellar-search-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>ia-search</artifactId>
+    <artifactId>stellar-search</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>
@@ -233,8 +233,7 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <configuration>
-                    <repository>data61/stellar-search</repository>
-                    <tag>${project.version}</tag>
+                    <repository>data61stellardev/stellar-search</repository>
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}-exec.jar</JAR_FILE>
                     </buildArgs>
@@ -243,5 +242,7 @@
 
         </plugins>
     </build>
+
+
     
 </project>

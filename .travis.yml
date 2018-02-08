@@ -16,9 +16,24 @@ branches:
   only:
   - master
   - develop
-  - "/^feature.*$/"
+  - "/^feature\\/.+$/"
+  - "/^release\\/.+$/"
+  - "/^hotfix\\/.+$/"
+  - "/^v\\d+\\.\\d+(\\.\\d+)?(-\\S*)?$/"
 
-script: mvn clean verify org.eluder.coveralls:coveralls-maven-plugin:report
+script:
+  - mvn verify org.eluder.coveralls:coveralls-maven-plugin:report
+
+after_success:
+  - |   # deploy snapshot
+    if [ "$TRAVIS_EVENT_TYPE" == push -a "$TRAVIS_BRANCH" == "develop" ]; then
+      mvn "-Ddockerfile.username=$DOCKER_USERNAME" "-Ddockerfile.password=$DOCKER_PASSWORD" deploy -P snapshot
+    fi
+
+  - |  # deploy release
+    if [ "$TRAVIS_EVENT_TYPE" == push -a -n "$TRAVIS_TAG" ]; then
+      mvn "-Ddockerfile.username=$DOCKER_USERNAME" "-Ddockerfile.password=$DOCKER_PASSWORD" deploy -P release
+    fi
 
 notifications:
   slack:

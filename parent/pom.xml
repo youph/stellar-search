@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>ia-root</artifactId>
-        <groupId>au.com.d2dcrc.ia</groupId>
+        <groupId>au.csiro.data61.stellar</groupId>
+        <artifactId>stellar-search-root</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <packaging>pom</packaging>
 
-    <artifactId>ia-parent</artifactId>
+    <artifactId>stellar-search-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>
@@ -25,18 +25,18 @@
             <!-- Sub-modules -->
 
             <dependency>
-                <groupId>au.com.d2dcrc.ia</groupId>
-                <artifactId>ia-build-tools</artifactId>
+                <groupId>au.csiro.data61.stellar</groupId>
+                <artifactId>stellar-search-build-tools</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>au.com.d2dcrc.ia</groupId>
-                <artifactId>ia-core</artifactId>
+                <groupId>au.csiro.data61.stellar</groupId>
+                <artifactId>stellar-search-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>au.com.d2dcrc.ia</groupId>
-                <artifactId>ia-search</artifactId>
+                <groupId>au.csiro.data61.stellar</groupId>
+                <artifactId>stellar-search-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -561,8 +561,8 @@
                     </executions>
                     <dependencies>
                         <dependency>
-                            <groupId>au.com.d2dcrc.ia</groupId>
-                            <artifactId>ia-build-tools</artifactId>
+                            <groupId>au.csiro.data61.stellar</groupId>
+                            <artifactId>stellar-search-build-tools</artifactId>
                             <version>${project.version}</version>
                         </dependency>
                         <dependency>
@@ -571,27 +571,6 @@
                             <version>8.8</version>
                         </dependency>
                     </dependencies>
-                </plugin>
-
-                <!--  JGitFlow - A replacement for the maven-release-plugin enabling support for git-flow style
-                      releases -->
-                <plugin>
-                    <groupId>external.atlassian.jgitflow</groupId>
-                    <artifactId>jgitflow-maven-plugin</artifactId>
-                    <version>1.0-m5.1</version>
-                    <configuration>
-                        <pushReleases>true</pushReleases>
-                        <flowInitContext>
-                            <masterBranchName>master</masterBranchName>
-                            <developBranchName>develop</developBranchName>
-                            <featureBranchPrefix>feature/</featureBranchPrefix>
-                            <releaseBranchPrefix>release/</releaseBranchPrefix>
-                            <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
-                            <versionTagPrefix/>
-                        </flowInitContext>
-                        <releaseBranchVersionSuffix>RC</releaseBranchVersionSuffix>
-                        <scmCommentPrefix xml:space="preserve">[jgitflow-maven-plugin] </scmCommentPrefix>
-                    </configuration>
                 </plugin>
 
                 <!-- Boring old release plugin  -->
@@ -636,8 +615,8 @@
                             <configuration>
                                 <allowMajorUpdates>false</allowMajorUpdates>
                                 <includes>
-                                    <include>au.com.d2dcrc:*</include>
-                                    <include>au.com.d2dcrc.*:*</include>
+                                    <include>au.csiro.data61.stellar:*</include>
+                                    <include>au.csiro.data61.stellar.*:*</include>
                                 </includes>
                             </configuration>
                         </execution>
@@ -669,8 +648,8 @@
                     </executions>
                     <dependencies>
                         <dependency>
-                            <groupId>au.com.d2dcrc.ia</groupId>
-                            <artifactId>ia-build-tools</artifactId>
+                            <groupId>au.csiro.data61.stellar</groupId>
+                            <artifactId>stellar-search-build-tools</artifactId>
                             <version>${project.version}</version>
                         </dependency>
                     </dependencies>
@@ -714,17 +693,12 @@
                         <execution>
                             <goals>
                                 <goal>build</goal>
-                                <goal>push</goal>
                             </goals>
+                            <configuration>
+                                <tag>${project.version}</tag>
+                            </configuration>
                         </execution>
                     </executions>
-                    <configuration>
-                        <repository>data61/stellar-search</repository>
-                        <tag>${project.version}</tag>
-                        <buildArgs>
-                            <JAR_FILE>target/${project.build.finalName}-exec.jar</JAR_FILE>
-                        </buildArgs>
-                    </configuration>
                 </plugin>
 
             </plugins>
@@ -760,5 +734,86 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <!--
+          Used by travis. for the moment both the release and snapshot build profiles do the same thing:
+            * this tag docker image with project.version (e.g x.y.z or x.y.z-SNAPSHOT),
+            * push the image
+          But in the future may wish to also tag with latest for one of them
+        -->
+        <profile>
+            <id>release</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.spotify</groupId>
+                            <artifactId>dockerfile-maven-plugin</artifactId>
+                            <version>1.3.7</version>
+                            <executions>
+                                <execution>
+                                    <id>tag-push-latest</id>
+                                    <goals>
+                                        <goal>tag</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                    <configuration>
+                                        <tag>latest</tag>
+                                    </configuration>
+                                </execution>
+                                <execution>
+                                    <id>tag-push-version</id>
+                                    <goals>
+                                        <goal>tag</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                    <configuration>
+                                        <tag>${project.version}</tag>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>snapshot</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.spotify</groupId>
+                            <artifactId>dockerfile-maven-plugin</artifactId>
+                            <version>1.3.7</version>
+                            <executions>
+                                <execution>
+                                    <id>tag-push-latest-snapshot</id>
+                                    <goals>
+                                        <goal>tag</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                    <configuration>
+                                        <tag>snapshot</tag>
+                                    </configuration>
+                                </execution>
+                                <execution>
+                                    <id>tag-push-version</id>
+                                    <goals>
+                                        <goal>tag</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                    <configuration>
+                                        <tag>${project.version}</tag>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

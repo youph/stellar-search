@@ -36,6 +36,12 @@
   brew cask install docker
   ```
   To complete the installation, open Docker in application or Launchpad and follow prompts.
+  To install shell completion for zsh (installed via brew)
+  ```commandline
+  ln -s /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion /usr/local/share/zsh/site-functions/_docker
+  ln -s /Applications/Docker.app/Contents/Resources/etc/docker-machine.zsh-completion /usr/local/share/zsh/site-functions/_docker-machine
+  ln -s /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion /usr/local/share/zsh/site-functions/_docker-compose
+  ```
   
 * [Postman](https://www.getpostman.com/) (Optional) 
   ```bash
@@ -64,7 +70,7 @@ mvn clean verify
 
 ## Running
 ```bash
-java -jar ./search/target/ia-search-<version>-exec.jar --spring.profiles.active=develop
+java -jar ./search/target/stellar-search-<version>-exec.jar --spring.profiles.active=develop
 ```
 
 Example to create a new IMDB Extended Property Graph (EPG) Index
@@ -104,12 +110,12 @@ A new Investigative Analytics API collection will be created with all documented
 
 2. As a JVM property
     ```
-    java -Dspring.profiles.active={develop|test|staging|production} -jar ./search/target/ia-search-<version>.jar
+    java -Dspring.profiles.active={develop|test|staging|production} -jar ./search/target/stellar-search-<version>.jar
     ```
 
 3. As a program argument (e.g. for self executing jar - but can also be used with `java -jar ...`)
     ```
-    ./search/target/ia-search-<version>-exec.jar --spring.profiles.active={develop|test|staging|production}
+    ./search/target/stellar-search-<version>-exec.jar --spring.profiles.active={develop|test|staging|production}
     ```
 
 #### Application profiles

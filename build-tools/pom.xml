@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>ia-root</artifactId>
-        <groupId>au.com.d2dcrc.ia</groupId>
+        <groupId>au.csiro.data61.stellar</groupId>
+        <artifactId>stellar-search-root</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ia-build-tools</artifactId>
+    <artifactId>stellar-search-build-tools</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>

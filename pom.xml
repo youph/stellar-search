@@ -2,8 +2,8 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>au.com.d2dcrc.ia</groupId>
-    <artifactId>ia-root</artifactId>
+    <groupId>au.csiro.data61.stellar</groupId>
+    <artifactId>stellar-search-root</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
@@ -65,5 +65,32 @@
         <module>core</module>
         <module>search</module>
     </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>serene-releases</id>
+            <url>s3://serene-maven-repository/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>serene-snapshots</id>
+            <url>s3://serene-maven-repository/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <extensions>
+            <!-- We are not using this plugin due to https://github.com/spring-projects/aws-maven/issues/51 -->
+            <!--<extension>-->
+                <!--<groupId>org.springframework.build</groupId>-->
+                <!--<artifactId>aws-maven</artifactId>-->
+                <!--<version>5.0.0.RELEASE</version>-->
+            <!--</extension>-->
+            <extension>
+                <groupId>org.kuali.maven.wagons</groupId>
+                <artifactId>maven-s3-wagon</artifactId>
+                <version>1.2.1</version>
+            </extension>
+        </extensions>
+    </build>
 
 </project>
