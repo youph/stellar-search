@@ -1,99 +1,127 @@
 package au.com.d2dcrc.ia.search.query;
 
+import au.com.d2dcrc.ia.search.BaseSpringTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
 import com.google.common.io.Resources;
 import java.io.IOException;
 import java.net.URL;
 import javax.inject.Inject;
-import org.junit.Assert;
+import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.io.InputStreamReader;
 
 @RunWith(SpringRunner.class)
 @JsonTest
-public class QueryRequestModelTest {
+@ContextConfiguration(classes = {ElasticsearchQueryBuilder.class})
+public class QueryRequestModelTest extends BaseSpringTest {
 
-    private final static Logger logger = LoggerFactory.getLogger(QueryRequestModelTest.class);
+    private static Logger logger = LoggerFactory.getLogger(QueryRequestModel.class);
 
     @Inject
     private ObjectMapper mapper;
 
+    @Inject
+    private ElasticsearchQueryBuilder queryBuilder;
+
     @Test
-    public void testQuery001() throws IOException {
-        final URL jsonResource = getClass().getResource("query001.json");
+    public void testCreateElasticQuery01() throws IOException, JSONException {
+        final URL jsonResource = getClass().getResource("user-query-01.json");
+        final String testFixture = queryBuilder.toElasticsearchQueryString(
+            mapper.readValue(jsonResource, QueryRequestModel.class)
+        );
+        final String expectedQuery = Resources.toString(
+            getClass().getResource("es-query-01.json"),
+            Charsets.UTF_8
+        );
 
-        QueryRequestModel queryModel = mapper
-            .readValue(jsonResource, QueryRequestModel.class);
+        // debug
+        logger.debug(Resources.toString(jsonResource, Charsets.UTF_8));
+        logger.debug(testFixture);
+        logger.debug(expectedQuery);
 
-        Assert.assertNotNull(queryModel);
-        Assert.assertEquals(queryModel.getNode().getLabel(), ImdbNodeLabel.Person);
-        Assert.assertEquals(queryModel.getNode().getProperties().get("name"), "Clint");
+        JSONAssert.assertEquals(testFixture, expectedQuery, true);
     }
 
     @Test
-    public void testQuery002() throws IOException {
-        final URL jsonResource = getClass().getResource("query002.json");
+    public void testCreateElasticQuery02() throws IOException, JSONException {
+        final URL jsonResource = getClass().getResource("user-query-02.json");
+        final String testFixture = queryBuilder.toElasticsearchQueryString(
+            mapper.readValue(jsonResource, QueryRequestModel.class)
+        );
+        final String expectedQuery = Resources.toString(
+            getClass().getResource("es-query-02.json"),
+            Charsets.UTF_8
+        );
 
-        QueryRequestModel queryModel = mapper
-            .readValue(jsonResource, QueryRequestModel.class);
+        // debug
+        logger.debug(Resources.toString(jsonResource, Charsets.UTF_8));
+        logger.debug(testFixture);
+        logger.debug(expectedQuery);
 
-        Assert.assertNotNull(queryModel);
-        Assert.assertEquals(queryModel.getNode().getLabel(), ImdbNodeLabel.Person);
-        Assert.assertEquals(queryModel.getNode().getProperties().get("name"), "Clint");
-        Assert
-            .assertEquals(queryModel.getNode().getRelation().getDirection(), RelationDirection.out);
-        Assert
-            .assertEquals(queryModel.getNode().getRelation().getLabel(), ImdbRelationLabel.actedin);
+        JSONAssert.assertEquals(testFixture, expectedQuery, true);
     }
 
     @Test
-    public void testQuery004() throws IOException {
-        final URL jsonResource = getClass().getResource("query004.json");
+    public void testCreateElasticQuery03() throws IOException, JSONException {
+        final URL jsonResource = getClass().getResource("user-query-03.json");
+        final String testFixture = queryBuilder.toElasticsearchQueryString(
+            mapper.readValue(jsonResource, QueryRequestModel.class)
+        );
+        final String expectedQuery = Resources.toString(
+            getClass().getResource("es-query-03.json"),
+            Charsets.UTF_8
+        );
 
-        QueryRequestModel queryModel = mapper
-            .readValue(jsonResource, QueryRequestModel.class);
+        // debug
+        logger.debug(Resources.toString(jsonResource, Charsets.UTF_8));
+        logger.debug(testFixture);
+        logger.debug(expectedQuery);
 
-        Assert.assertNotNull(queryModel);
-        Assert.assertEquals(queryModel.getNode().getLabel(), ImdbNodeLabel.Film);
-        Assert.assertEquals(queryModel.getNode().getProperties().size(), 0);
-        Assert
-            .assertEquals(queryModel.getNode().getRelation().getDirection(), RelationDirection.in);
-        Assert
-            .assertEquals(queryModel.getNode().getRelation().getLabel(), ImdbRelationLabel.actedin);
-        Assert.assertEquals(queryModel.getNode().getRelation().getNode().getLabel(),
-            ImdbNodeLabel.Person);
-        Assert
-            .assertEquals(queryModel.getNode().getRelation().getNode().getProperties().get("name"),
-                "Clint Eastwood");
+        JSONAssert.assertEquals(testFixture, expectedQuery, true);
     }
 
     @Test
-    public void testQuery005() throws IOException {
-        final URL jsonResource = getClass().getResource("query005.json");
+    public void testCreateElasticQuery04() throws IOException, JSONException {
+        final URL jsonResource = getClass().getResource("user-query-04.json");
+        final String testFixture = queryBuilder.toElasticsearchQueryString(
+            mapper.readValue(jsonResource, QueryRequestModel.class)
+        );
+        final String expectedQuery = Resources.toString(
+            getClass().getResource("es-query-04.json"),
+            Charsets.UTF_8
+        );
 
-        QueryRequestModel queryModel = mapper
-            .readValue(jsonResource, QueryRequestModel.class);
+        // debug
+        logger.debug(Resources.toString(jsonResource, Charsets.UTF_8));
+        logger.debug(testFixture);
+        logger.debug(expectedQuery);
 
-        Assert.assertNotNull(queryModel);
-        Assert.assertEquals(queryModel.getNode().getLabel(), ImdbNodeLabel.Film);
-        Assert.assertEquals(queryModel.getNode().getProperties().get("classification"), "Thriller");
-        Assert
-            .assertEquals(queryModel.getNode().getRelation().getDirection(), RelationDirection.in);
-        Assert
-            .assertEquals(queryModel.getNode().getRelation().getLabel(), ImdbRelationLabel.actedin);
-        Assert.assertEquals(queryModel.getNode().getRelation().getNode().getLabel(),
-            ImdbNodeLabel.Person);
-        Assert
-            .assertEquals(queryModel.getNode().getRelation().getNode().getProperties().get("name"),
-                "Clint Eastwood");
+        JSONAssert.assertEquals(testFixture, expectedQuery, true);
+    }
+
+    @Test
+    public void testCreateElasticQuery05() throws IOException, JSONException {
+        final URL jsonResource = getClass().getResource("user-query-05.json");
+        final String testFixture = queryBuilder.toElasticsearchQueryString(
+            mapper.readValue(jsonResource, QueryRequestModel.class)
+        );
+        final String expectedQuery = Resources.toString(
+            getClass().getResource("es-query-05.json"),
+            Charsets.UTF_8
+        );
+
+        // debug
+        logger.debug(Resources.toString(jsonResource, Charsets.UTF_8));
+        logger.debug(testFixture);
+        logger.debug(expectedQuery);
+
+        JSONAssert.assertEquals(testFixture, expectedQuery, true);
     }
 }

@@ -1,0 +1,32 @@
+{
+  "query" : {
+    "bool" : {
+      "filter" : [
+        {
+          "term" : { "label" : "Film" }
+        }
+      ],
+      "must" : [
+        { "match" : { "properties.classification" : "Thriller" } },
+        {
+          "nested" : {
+            "path" : "in",
+            "query" : {
+              "bool" : {
+                "must" : [
+                  {
+                    "term" : { "in.label" : "actedin" }
+                  },
+                  {
+                    "match" : { "in.node.properties.name" : "Clint Eastwood" }
+                  }
+                ]
+              }
+            },
+            "inner_hits": {}
+          }
+        }
+      ]
+    }
+  }
+}

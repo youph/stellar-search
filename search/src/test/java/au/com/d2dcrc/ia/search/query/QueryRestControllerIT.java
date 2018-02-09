@@ -6,14 +6,17 @@ import static org.hamcrest.Matchers.hasItem;
 
 import au.com.d2dcrc.ia.search.BaseSpringTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
@@ -26,6 +29,25 @@ public class QueryRestControllerIT extends BaseSpringTest {
     private ObjectMapper mapper;
 
     /**
+     * Inject the ephemeral port used for integration testing into
+     *
+     * @param port the ephemeral port used
+     */
+    @LocalServerPort
+    public void setPort(int port) {
+        logger.debug("Setting port for rest assured to {}", port);
+        RestAssured.port = port;
+    }
+
+    /**
+     * Sets the config to log the request/response on validation failure.
+     */
+    @BeforeClass
+    public static void beforeClass() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    }
+
+    /**
      * Tests the search endpoint. All valid requests currently return the same mock response
      * containing 3 hits.
      */
@@ -35,22 +57,22 @@ public class QueryRestControllerIT extends BaseSpringTest {
         QueryResultView view = null;
 
         queryModel = mapper
-            .readValue(getClass().getResource("query001.json"), QueryRequestModel.class);
+            .readValue(getClass().getResource("user-query-01.json"), QueryRequestModel.class);
         view = search(queryModel);
         Assert.assertEquals(view.getTotal(), 3);
 
         queryModel = mapper
-            .readValue(getClass().getResource("query002.json"), QueryRequestModel.class);
+            .readValue(getClass().getResource("user-query-02.json"), QueryRequestModel.class);
         view = search(queryModel);
         Assert.assertEquals(view.getTotal(), 3);
 
         queryModel = mapper
-            .readValue(getClass().getResource("query004.json"), QueryRequestModel.class);
+            .readValue(getClass().getResource("user-query-04.json"), QueryRequestModel.class);
         view = search(queryModel);
         Assert.assertEquals(view.getTotal(), 3);
 
         queryModel = mapper
-            .readValue(getClass().getResource("query005.json"), QueryRequestModel.class);
+            .readValue(getClass().getResource("user-query-05.json"), QueryRequestModel.class);
         view = search(queryModel);
         Assert.assertEquals(view.getTotal(), 3);
     }

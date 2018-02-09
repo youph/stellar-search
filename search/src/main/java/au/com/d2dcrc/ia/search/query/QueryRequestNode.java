@@ -2,8 +2,10 @@ package au.com.d2dcrc.ia.search.query;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
@@ -20,38 +22,38 @@ public class QueryRequestNode {
     private final ImdbNodeLabel label;
 
     @ApiModelProperty(value = "optional node properties")
-    private final Map<String, Object> properties;
+    private final Map<String, JsonNode> properties;
 
     @ApiModelProperty(value = "optional node relations")
-    private final QueryRequestNodeRelation relation;
+    private final List<QueryRequestNodeRelation> relations;
 
     /**
      * Constructor.
      *
      * @param label the label of the node (the node type)
      * @param properties optional properties of the node
-     * @param relation a relation (edge) connected to this node
+     * @param relations a relation (edge) connected to this node
      */
     @JsonCreator
     public QueryRequestNode(
         @JsonProperty("label") final ImdbNodeLabel label,
-        @JsonProperty("properties") final Map<String, Object> properties,
-        @JsonProperty("relation") final QueryRequestNodeRelation relation
+        @JsonProperty("properties") final Map<String, JsonNode> properties,
+        @JsonProperty("relations") final List<QueryRequestNodeRelation> relations
     ) {
         this.label = label;
         this.properties = properties;
-        this.relation = relation;
+        this.relations = relations;
     }
 
     public ImdbNodeLabel getLabel() {
         return label;
     }
 
-    public Map<String, Object> getProperties() {
+    public Map<String, JsonNode> getProperties() {
         return properties;
     }
 
-    public QueryRequestNodeRelation getRelation() {
-        return relation;
+    public List<QueryRequestNodeRelation> getRelations() {
+        return relations;
     }
 }

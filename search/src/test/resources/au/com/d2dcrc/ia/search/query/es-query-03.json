@@ -1,0 +1,25 @@
+{
+  "query" : {
+    "bool" : {
+      "filter" : [
+        {
+          "term" : { "label" : "Person" }
+        }
+      ],
+      "must" : [
+        {
+          "match" : { "properties.name" : "Clint" }
+        },
+        {
+          "nested" : {
+            "path" : "out",
+            "query" : {
+              "match_all": {}
+            },
+            "inner_hits": {}
+          }
+        }
+      ]
+    }
+  }
+}

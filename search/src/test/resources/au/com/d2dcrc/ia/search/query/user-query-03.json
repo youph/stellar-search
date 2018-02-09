@@ -4,9 +4,10 @@
     "properties": {
       "name": "Clint"
     },
-    "relation": {
-      "direction": "out",
-      "label": "actedin"
-    }
+    "relations": [
+      {
+        "direction": "out"
+      }
+    ]
   }
 }

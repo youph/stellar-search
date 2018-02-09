@@ -1,0 +1,14 @@
+{
+  "node": {
+    "label": "Person",
+    "properties": {
+      "name": "Clint"
+    },
+    "relations": [
+      {
+        "direction": "out",
+        "label": "actedin"
+      }
+    ]
+  }
+}
