@@ -208,4 +208,30 @@ public class EpgDataIngestorTest {
         return new URI("file://" + path + "/XXX");
     }
 
+    /**
+     * Tests against bad vertex path.
+     * 
+     * @throws IOException if something bad happens.
+     * @throws URISyntaxException if the resource path fails.
+     */
+    @Test(expected = EpgDataException.class)
+    public void testBadVertexPath() throws IOException, URISyntaxException {
+        EpgReferenceModel dataSource = new EpgReferenceModel(getResourceURI("./imdb-nested/heads"), null, null);
+        EpgDataIngestor ingestor = getDataIngestor();
+        ingestor.ingest(dataSource);
+    }
+
+    /**
+     * Tests against bad edge path.
+     * 
+     * @throws IOException if something bad happens.
+     * @throws URISyntaxException if the resource path fails.
+     */
+    @Test(expected = EpgDataException.class)
+    public void testBadEdgePath() throws IOException, URISyntaxException {
+        EpgReferenceModel dataSource = new EpgReferenceModel(getResourceURI("./imdb-nested/heads"), getResourceURI("./imdb-nested/vertices"), null);
+        EpgDataIngestor ingestor = getDataIngestor();
+        ingestor.ingest(dataSource);
+    }
+
 }
