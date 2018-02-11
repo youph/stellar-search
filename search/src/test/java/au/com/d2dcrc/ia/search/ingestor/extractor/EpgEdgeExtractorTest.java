@@ -1,4 +1,4 @@
-package au.com.d2dcrc.ia.search.extractor;
+package au.com.d2dcrc.ia.search.ingestor.extractor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
