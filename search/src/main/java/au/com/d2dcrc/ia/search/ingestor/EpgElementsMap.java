@@ -12,12 +12,12 @@ public class EpgElementsMap<T extends EpgElement> implements EpgElementContainer
 
     @Override
     public void addElement(T elem) throws EpgElementExistsException {
-        T oldElem = map.put(elem.getId(), elem);
-        if (oldElem != null) {
+        if (map.containsKey(elem.getId())) {
             throw new EpgElementExistsException(
-                    "Duplicate " + oldElem.getClass().getSimpleName() + " with identifier " + elem.getId()
+                "Duplicate " + elem.getClass().getSimpleName() + " with identifier " + elem.getId()
             );
         }
+        map.put(elem.getId(), elem);
     }
 
     @Override

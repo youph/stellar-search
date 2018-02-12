@@ -10,9 +10,10 @@ import au.com.d2dcrc.ia.search.ingestor.extractor.EpgEdgeExtractor;
 import au.com.d2dcrc.ia.search.ingestor.extractor.EpgHeadExtractor;
 import au.com.d2dcrc.ia.search.ingestor.extractor.EpgVertexExtractor;
 import au.com.d2dcrc.ia.search.management.EpgReferenceModel;
-import java.io.File;
 import java.net.URI;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Ingests EPG graphs from raw data.
@@ -63,11 +64,11 @@ public class EpgDataIngestor {
     }
 
     private Path getFilePath(URI uriPath) {
-        String path = uriPath.getPath();
-        if (path == null || path.trim().isEmpty()) {
+        try {
+            return Paths.get(uriPath);
+        } catch (IllegalArgumentException | FileSystemNotFoundException e) {
             throw new EpgDataException("Invalid file path URI: " + uriPath);
         }
-        return new File(path).toPath();
     }
 
     private void ingestVertices(URI vertexData) {
