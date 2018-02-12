@@ -1,11 +1,8 @@
 package au.com.d2dcrc.ia.search.epg;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 import au.com.d2dcrc.ia.search.BaseSpringTest;
 import au.com.d2dcrc.ia.search.management.EpgReferenceModel;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import javax.inject.Inject;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;

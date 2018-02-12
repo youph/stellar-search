@@ -1,6 +1,13 @@
 package au.com.d2dcrc.ia.search.management;
 
 import au.com.d2dcrc.ia.search.elastic.ElasticsearchIndexHelper;
+import au.com.d2dcrc.ia.search.graph.EpgEdge;
+import au.com.d2dcrc.ia.search.graph.EpgHead;
+import au.com.d2dcrc.ia.search.graph.EpgVertex;
+import au.com.d2dcrc.ia.search.ingestor.EpgDataIngestor;
+import au.com.d2dcrc.ia.search.ingestor.EpgElementContainer;
+import au.com.d2dcrc.ia.search.ingestor.EpgElementsMap;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgIngestionException;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,12 +70,13 @@ public class EpgManagementService {
      * @param name the name of the EPG to create
      * @param epgReference the reference to graphs, nodes and vertices to index
      * @return a view of meta data the newly created EPG index
-     * @throws EntityExistsException if an EPG with name already exists
+     * @throws EntityExistsException if an EPG with the given name already exists
+     * @throws EpgIngestionException if the graph data are not ingestible from any of their respective sources.
      */
     public EpgMetaView createEpg(
         final String name,
         final EpgReferenceModel epgReference
-    ) throws EntityExistsException, ElasticsearchException {
+    ) throws EntityExistsException, EpgIngestionException, ElasticsearchException {
 
         if (metaRepo.exists(name)) {
             throw new EntityExistsException("An EPG with name '" + name + "' already exists");
@@ -76,6 +84,13 @@ public class EpgManagementService {
 
         // todo utilise optimistic concurrency to avoid race condition
         // between check and save as an alternative to database locking
+
+        // Read in the EPG data files
+        EpgElementContainer<EpgHead> epgHeads = new EpgElementsMap<>();
+        EpgElementContainer<EpgVertex> epgVertices = new EpgElementsMap<>();
+        EpgElementContainer<EpgEdge> epgEdges = new EpgElementsMap<>();
+        EpgDataIngestor ingestor = new EpgDataIngestor(epgHeads, epgVertices, epgEdges);
+        ingestor.ingest(epgReference);
 
         // Create a new elasticsearch index
         elasticsearchIndexHelper.createIndex(name, epgReference.getEpgSchema());
@@ -89,8 +104,7 @@ public class EpgManagementService {
             epgReference.getEdges()
         );
 
-        return metaRepo.saveAndFlush(metaEntity)
-            .toView();
+        return metaRepo.saveAndFlush(metaEntity).toView();
     }
 
     /**

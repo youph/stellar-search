@@ -3,6 +3,7 @@ package au.com.d2dcrc.ia.search.ingestor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import au.com.d2dcrc.ia.search.epg.EpgReferenceFixtures;
 import au.com.d2dcrc.ia.search.graph.EpgEdge;
 import au.com.d2dcrc.ia.search.graph.EpgElement;
 import au.com.d2dcrc.ia.search.graph.EpgHead;
@@ -31,20 +32,13 @@ public class EpgDataIngestorTest {
      */
     @Test
     public void testIMDBIngestion() throws IOException, URISyntaxException {
-        EpgReferenceModel dataSource = getIMDBFlat("", "", "");
+        EpgReferenceModel dataSource = EpgReferenceFixtures.IMDB_EPG_REFERENCE_MODEL;
         EpgDataIngestor ingestor = getDataIngestor();
         ingestor.ingest(dataSource);
     }
 
-    private EpgReferenceModel getIMDBFlat(String head, String vertex, String edge) throws URISyntaxException {
-        URI headResource = getResourceURI("./imdb-flat/imdb-heads" + head + ".json");
-        URI vertexResource = getResourceURI("./imdb-flat/imdb-vertices" + vertex + ".json");
-        URI edgeResource = getResourceURI("./imdb-flat/imdb-edges" + edge + ".json");
-        return new EpgReferenceModel(headResource, vertexResource, edgeResource);
-    }
-
     private URI getResourceURI(String path) throws URISyntaxException {
-        return getClass().getResource(path).toURI();
+        return EpgReferenceFixtures.class.getResource(path).toURI();
     }
 
     private EpgDataIngestor getDataIngestor() {
@@ -66,6 +60,13 @@ public class EpgDataIngestorTest {
         EpgReferenceModel dataSource = getIMDBFlat("-duplicate", "", "");
         EpgDataIngestor ingestor = getDataIngestor();
         ingestor.ingest(dataSource);
+    }
+
+    private EpgReferenceModel getIMDBFlat(String head, String vertex, String edge) throws URISyntaxException {
+        URI headResource = getResourceURI("imdb-flat/imdb-heads" + head + ".json");
+        URI vertexResource = getResourceURI("imdb-flat/imdb-vertices" + vertex + ".json");
+        URI edgeResource = getResourceURI("imdb-flat/imdb-edges" + edge + ".json");
+        return new EpgReferenceModel(headResource, vertexResource, edgeResource, null);
     }
 
     /**
@@ -128,16 +129,9 @@ public class EpgDataIngestorTest {
      */
     @Test
     public void testIMDBNestedIngestion() throws IOException, URISyntaxException {
-        EpgReferenceModel dataSource = getIMDBNested();
+        EpgReferenceModel dataSource = EpgReferenceFixtures.IMDB_EPG_NESTED_REFERENCE_MODEL;
         EpgDataIngestor ingestor = getDataIngestor();
         ingestor.ingest(dataSource);
-    }
-
-    private EpgReferenceModel getIMDBNested() throws URISyntaxException {
-        URI headResource = getResourceURI("./imdb-nested/heads");
-        URI vertexResource = getResourceURI("./imdb-nested/vertices");
-        URI edgeResource = getResourceURI("./imdb-nested/edges");
-        return new EpgReferenceModel(headResource, vertexResource, edgeResource);
     }
 
     /**
@@ -148,7 +142,7 @@ public class EpgDataIngestorTest {
      */
     @Test
     public void testIMDBNestedIngestionAgain() throws IOException, URISyntaxException {
-        EpgReferenceModel dataSource = getIMDBNested();
+        EpgReferenceModel dataSource = EpgReferenceFixtures.IMDB_EPG_NESTED_REFERENCE_MODEL;
         EpgElementsMap<EpgHead> epgHeads = new EpgElementsMap<>();
         EpgElementsMap<EpgVertex> epgVertices = new EpgElementsMap<>();
         EpgElementsMap<EpgEdge> epgEdges = new EpgElementsMap<>();
@@ -185,7 +179,7 @@ public class EpgDataIngestorTest {
      */
     @Test(expected = EpgDataException.class)
     public void testNonFilePath() throws IOException, URISyntaxException {
-        EpgReferenceModel dataSource = new EpgReferenceModel(null, null, null);
+        EpgReferenceModel dataSource = new EpgReferenceModel(null, null, null, null);
         EpgDataIngestor ingestor = getDataIngestor();
         ingestor.ingest(dataSource);
     }
@@ -198,7 +192,7 @@ public class EpgDataIngestorTest {
      */
     @Test(expected = EpgDataException.class)
     public void testBadPath() throws IOException, URISyntaxException {
-        EpgReferenceModel dataSource = new EpgReferenceModel(getBadURI(), getBadURI(), getBadURI());
+        EpgReferenceModel dataSource = new EpgReferenceModel(getBadURI(), getBadURI(), getBadURI(), null);
         EpgDataIngestor ingestor = getDataIngestor();
         ingestor.ingest(dataSource);
     }
@@ -216,7 +210,7 @@ public class EpgDataIngestorTest {
      */
     @Test(expected = EpgDataException.class)
     public void testBadVertexPath() throws IOException, URISyntaxException {
-        EpgReferenceModel dataSource = new EpgReferenceModel(getResourceURI("./imdb-nested/heads"), null, null);
+        EpgReferenceModel dataSource = new EpgReferenceModel(getResourceURI("imdb-nested/heads"), null, null, null);
         EpgDataIngestor ingestor = getDataIngestor();
         ingestor.ingest(dataSource);
     }
@@ -229,7 +223,7 @@ public class EpgDataIngestorTest {
      */
     @Test(expected = EpgDataException.class)
     public void testBadEdgePath() throws IOException, URISyntaxException {
-        EpgReferenceModel dataSource = new EpgReferenceModel(getResourceURI("./imdb-nested/heads"), getResourceURI("./imdb-nested/vertices"), null);
+        EpgReferenceModel dataSource = new EpgReferenceModel(getResourceURI("imdb-nested/heads"), getResourceURI("imdb-nested/vertices"), null, null);
         EpgDataIngestor ingestor = getDataIngestor();
         ingestor.ingest(dataSource);
     }

@@ -5,33 +5,32 @@ import au.com.d2dcrc.ia.search.management.EpgSchema;
 import au.com.d2dcrc.ia.search.management.GraphSchema;
 import au.com.d2dcrc.ia.search.management.GraphSchemaClass;
 import au.com.d2dcrc.ia.search.management.GraphSchemaClassLink;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.net.URI;
-import javax.inject.Inject;
 
 /**
  * Fixture for EPG reference
  */
 public class EpgReferenceFixtures {
+
     /**
-     * Fixture for the IMDB EPG reference model
+     * Fixture for the IMDB EPG reference model sourced from flat files in the ingestor format.
      */
     public static final EpgReferenceModel IMDB_EPG_REFERENCE_MODEL = new EpgReferenceModel(
-        URI.create(EpgReferenceFixtures.class.getResource("imdb-graphs.json").toString()),
-        URI.create(EpgReferenceFixtures.class.getResource("imdb-vertices.json").toString()),
-        URI.create(EpgReferenceFixtures.class.getResource("imdb-edges.json").toString()),
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-flat/imdb-heads.json").toString()),
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-flat/imdb-vertices.json").toString()),
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-flat/imdb-edges.json").toString()),
         null
     );
 
     /**
-     * Fixture for the IMDB EPG reference model with example graph schema information
+     * Fixture for the IMDB EPG reference model (ingestor format) with example graph schema information
      */
     public static final EpgReferenceModel IMDB_EPG_REFERENCE_MODEL_GRAPH_SCHEMA = new EpgReferenceModel(
-        URI.create(EpgReferenceFixtures.class.getResource("imdb-graphs.json").toString()),
-        URI.create(EpgReferenceFixtures.class.getResource("imdb-vertices.json").toString()),
-        URI.create(EpgReferenceFixtures.class.getResource("imdb-edges.json").toString()),
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-flat/imdb-heads.json").toString()),
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-flat/imdb-vertices.json").toString()),
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-flat/imdb-edges.json").toString()),
         new EpgSchema(
             ImmutableList.of(
                 URI.create("films.csv"),
@@ -84,10 +83,10 @@ public class EpgReferenceFixtures {
             "    \"vertices\": \"${vertices}\"\n" +
             "}\n"
     )
-        .replace("${graphs}", EpgReferenceFixtures.class.getResource("imdb-graphs.json").toString())
+        .replace("${graphs}", EpgReferenceFixtures.class.getResource("imdb-flat/imdb-heads.json").toString())
         .replace("${vertices}",
-            EpgReferenceFixtures.class.getResource("imdb-vertices.json").toString())
-        .replace("${edges}", EpgReferenceFixtures.class.getResource("imdb-edges.json").toString());
+            EpgReferenceFixtures.class.getResource("imdb-flat/imdb-vertices.json").toString())
+        .replace("${edges}", EpgReferenceFixtures.class.getResource("imdb-flat/imdb-edges.json").toString());
 
     /**
      * Fixture for IMDB EPG reference with example graph schema information.
@@ -151,8 +150,20 @@ public class EpgReferenceFixtures {
             + "  }\n"
             + "}\n"
     )
-        .replace("${graphs}", EpgReferenceFixtures.class.getResource("imdb-graphs.json").toString())
+        .replace("${graphs}", EpgReferenceFixtures.class.getResource("imdb-flat/imdb-heads.json").toString())
         .replace("${vertices}",
-            EpgReferenceFixtures.class.getResource("imdb-vertices.json").toString())
-        .replace("${edges}", EpgReferenceFixtures.class.getResource("imdb-edges.json").toString());
+            EpgReferenceFixtures.class.getResource("imdb-flat/imdb-vertices.json").toString())
+        .replace("${edges}", EpgReferenceFixtures.class.getResource("imdb-flat/imdb-edges.json").toString());
+
+
+    /**
+     * Fixture for the IMDB EPG reference model sourced from nested files in the ingestor format.
+     */
+    public static final EpgReferenceModel IMDB_EPG_NESTED_REFERENCE_MODEL = new EpgReferenceModel(
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-nested/heads").toString()),
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-nested/vertices").toString()),
+        URI.create(EpgReferenceFixtures.class.getResource("imdb-nested/edges").toString()),
+        null
+    );
+
 }
