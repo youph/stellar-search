@@ -17,7 +17,7 @@ import org.junit.Test;
  */
 public class EpgEdgeModelTest {
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Tests against the IMBD edge data.

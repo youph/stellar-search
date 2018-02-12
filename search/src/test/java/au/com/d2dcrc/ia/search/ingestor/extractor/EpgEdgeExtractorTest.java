@@ -6,7 +6,6 @@ import au.com.d2dcrc.ia.search.graph.EpgEdge;
 import au.com.d2dcrc.ia.search.graph.EpgProperties;
 import au.com.d2dcrc.ia.search.ingestor.error.EpgMissingFieldException;
 import au.com.d2dcrc.ia.search.ingestor.error.EpgSyntaxException;
-import au.com.d2dcrc.ia.search.ingestor.extractor.EpgEdgeExtractor;
 import java.util.Collections;
 import org.junit.Test;
 

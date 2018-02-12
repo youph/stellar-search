@@ -1,10 +1,15 @@
 package au.com.d2dcrc.ia.search.ingestor.model;
 
 import au.com.d2dcrc.ia.search.ingestor.error.EpgMissingFieldException;
+import au.com.d2dcrc.ia.search.ingestor.error.EpgSyntaxException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 import io.swagger.annotations.ApiModel;
@@ -16,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 @Validated
-public class EpgVertexModel {
+public class EpgVertexModel implements EpgElementModel {
 
     @ApiModelProperty(value = "the identifier of the vertex", required = true)
     @NotNull
@@ -81,6 +86,7 @@ public class EpgVertexModel {
      * 
      * @throws EpgMissingFieldException if a vertex field is missing.
      */
+    @Override
     public void validate() throws EpgMissingFieldException {
         if (this.getId() == null) {
             throw new EpgMissingFieldException("Missing EPG vertex identifier");
@@ -94,4 +100,18 @@ public class EpgVertexModel {
         this.getMetaData().validate();
     }
 
+    /**
+     * Validates that all fields obey the model schema.
+     * 
+     * @param validator - The external schema validator.
+     * @throws EpgSyntaxException if the model data do not obey the model schema.
+     */
+    @Override
+    public void validate(Validator validator) throws EpgSyntaxException  {
+        Set<ConstraintViolation<EpgVertexModel>> violations = validator.validate(this);
+        if (!violations.isEmpty()) {
+            throw new EpgSyntaxException(new ConstraintViolationException(violations).getMessage());
+        }
+    }
+    
 }

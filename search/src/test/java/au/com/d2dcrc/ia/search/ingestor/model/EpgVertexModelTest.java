@@ -52,6 +52,7 @@ public class EpgVertexModelTest {
         EpgVertexModel model = mapper.readValue(jsonResource, EpgVertexModel.class);
 
         assertNotNull(model);
+        model.validate();
         assertEquals("59ace2bc1f9e746b6e5fed0e", model.getId());
         assertNotNull(model.getData());
         EpgProperties data = new EpgProperties(

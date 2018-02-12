@@ -2,9 +2,12 @@ package au.com.d2dcrc.ia.search.ingestor.extractor;
 
 import au.com.d2dcrc.ia.search.graph.EpgElement;
 import au.com.d2dcrc.ia.search.ingestor.error.EpgSyntaxException;
+import au.com.d2dcrc.ia.search.ingestor.model.EpgElementModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.Validator;
 
 /**
  * Allows the repeated extraction of EPG elements of the specified type from raw
@@ -14,9 +17,26 @@ import java.util.Set;
  */
 public abstract class EpgElementExtractor<T extends EpgElement> {
 
-    protected final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
+    private final Validator validator;
 
-    protected EpgElementExtractor() {}
+    /**
+     * Initialises the extractor.
+     */
+    protected EpgElementExtractor() {
+        this(new ObjectMapper(), null);
+    }
+
+    /**
+     * Initialises the extractor.
+     * 
+     * @param mapper - The JSON object mapper.
+     * @param validator - The model schema validator.
+     */
+    protected EpgElementExtractor(ObjectMapper mapper, Validator validator) {
+        this.mapper = mapper;
+        this.validator = validator;
+    }
 
     /**
      * Extracts an EPG element of the pre-specified type from the raw JSON model data.
@@ -33,6 +53,29 @@ public abstract class EpgElementExtractor<T extends EpgElement> {
             idSet.add(id);
         }
         return idSet;
+    }
+
+    /**
+     * Extracts an EPG model object from raw data.
+     * 
+     * @param <S> - The type of model.
+     * @param json - The textual JSON representation of the EPG element.
+     * @param modelClass - The class of the extracted model.
+     * @return The model of the EPG element.
+     * @throws EpgSyntaxException if the JSON representation does not obey the EPG element syntax.
+     */
+    protected <S extends EpgElementModel> S readModel(String json, Class<S> modelClass) throws EpgSyntaxException {
+        try {
+            S model = mapper.readValue(json, modelClass);
+            if (validator != null) {
+                model.validate(validator);
+            } else {
+                model.validate();
+            }
+            return model;
+        } catch (IOException e) {
+            throw new EpgSyntaxException(e.getMessage());
+        }
     }
 
 }

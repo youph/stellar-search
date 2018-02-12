@@ -6,7 +6,6 @@ import au.com.d2dcrc.ia.search.graph.EpgProperties;
 import au.com.d2dcrc.ia.search.graph.EpgVertex;
 import au.com.d2dcrc.ia.search.ingestor.error.EpgMissingFieldException;
 import au.com.d2dcrc.ia.search.ingestor.error.EpgSyntaxException;
-import au.com.d2dcrc.ia.search.ingestor.extractor.EpgVertexExtractor;
 import java.util.Collections;
 import org.junit.Test;
 

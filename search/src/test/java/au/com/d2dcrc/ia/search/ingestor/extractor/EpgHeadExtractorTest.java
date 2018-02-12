@@ -6,7 +6,6 @@ import au.com.d2dcrc.ia.search.graph.EpgHead;
 import au.com.d2dcrc.ia.search.graph.EpgProperties;
 import au.com.d2dcrc.ia.search.ingestor.error.EpgMissingFieldException;
 import au.com.d2dcrc.ia.search.ingestor.error.EpgSyntaxException;
-import au.com.d2dcrc.ia.search.ingestor.extractor.EpgHeadExtractor;
 import org.junit.Test;
 
 /**
